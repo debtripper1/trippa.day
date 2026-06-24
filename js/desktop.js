@@ -345,7 +345,7 @@
     { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '⨁' },
     { album: 'MORTAL SVN', file: 'UNDER THE MORTAL SUN.mp3', icon: '☀' },
     { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
-    { album: 'FROSTFIRE', file: 'SIGNAL LOST.wav', icon: '✜' },
+    { album: 'FROSTFIRE', file: 'SIGNAL LOST.mp3', icon: '✜' },
     { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
     { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '🔥' },
     { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '▣' },
@@ -354,7 +354,7 @@
     { album: 'FROSTFIRE', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '⟡' },
     { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
     { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '⨁' },
-    { album: 'FROSTFIRE', file: 'AMBER GLASS.wav', icon: '◆' },
+    { album: 'FROSTFIRE', file: 'AMBER GLASS.mp3', icon: '◆' },
   ];
 
   miniApps.music = {
