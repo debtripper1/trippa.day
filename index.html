@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>trippa.day</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+</head>
+<body>
+  <div id="desktop">
+    <div id="icon-grid">
+      <div class="desktop-icon" data-app="music" data-window="Music Player">
+        <div class="desktop-icon-img">🎵</div>
+        <div class="desktop-icon-label">My Music</div>
+      </div>
+      <div class="desktop-icon" data-app="files" data-window="File Browser">
+        <div class="desktop-icon-img">📁</div>
+        <div class="desktop-icon-label">My Files</div>
+      </div>
+      <div class="desktop-icon" data-app="downloads" data-window="Downloads">
+        <div class="desktop-icon-img">📥</div>
+        <div class="desktop-icon-label">Downloads</div>
+      </div>
+      <div class="desktop-icon" data-app="apps" data-window="Web Apps">
+        <div class="desktop-icon-img">🖥️</div>
+        <div class="desktop-icon-label">Web Apps</div>
+      </div>
+      <div class="desktop-icon" data-app="settings" data-window="Settings">
+        <div class="desktop-icon-img">⚙️</div>
+        <div class="desktop-icon-label">Settings</div>
+      </div>
+      <div class="desktop-icon" data-app="recycle" data-window="Recycle Bin">
+        <div class="desktop-icon-img">🗑️</div>
+        <div class="desktop-icon-label">Recycle Bin</div>
+      </div>
+    </div>
+
+    <div id="window-manager"></div>
+
+    <div id="start-menu">
+      <div id="start-sidebar">
+        <span>trippa.day</span>
+      </div>
+      <div id="start-items">
+        <div class="start-item" data-app="music">
+          <span class="start-item-icon">🎵</span>
+          <span class="start-item-label">Music Player</span>
+        </div>
+        <div class="start-item" data-app="files">
+          <span class="start-item-icon">📁</span>
+          <span class="start-item-label">File Browser</span>
+        </div>
+        <div class="start-item" data-app="downloads">
+          <span class="start-item-icon">📥</span>
+          <span class="start-item-label">Downloads</span>
+        </div>
+        <div class="start-item" data-app="apps">
+          <span class="start-item-icon">🖥️</span>
+          <span class="start-item-label">Web Apps</span>
+        </div>
+        <div class="start-item" data-app="settings">
+          <span class="start-item-icon">⚙️</span>
+          <span class="start-item-label">Settings</span>
+        </div>
+        <hr>
+        <div class="start-item" id="start-shutdown">
+          <span class="start-item-icon">⏻</span>
+          <span class="start-item-label">Shut Down...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <button id="start-button">
+      <span class="start-logo">🪟</span>
+      <span>Start</span>
+    </button>
+    <div id="taskbar-items"></div>
+    <div id="system-tray">
+      <span id="clock"></span>
+    </div>
+  </div>
+
+  <script src="js/desktop.js"></script>
+</body>
+</html>
