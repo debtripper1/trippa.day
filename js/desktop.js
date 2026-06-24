@@ -248,9 +248,7 @@
         if (app) openWindow(app);
       });
     });
-    el.querySelectorAll('.file-grid-item[data-type="file"]').forEach(item => {
-      item.addEventListener('dblclick', function () { unlockRandomTrack(); });
-    });
+
     const upBtn = el.querySelector('.nav-up');
     if (upBtn) {
       upBtn.addEventListener('click', function () {
@@ -381,14 +379,37 @@
     return trackDB.filter(function (t, i) { return unlocked.has(i); });
   }
 
-  function unlockRandomTrack() {
-    const pool = trackDB.filter(function (t) { return t.album === (darkMode ? 'FROSTFIRE' : 'MORTAL SVN'); });
-    const locked = pool.filter(function (t) { return !unlocked.has(trackDB.indexOf(t)); });
-    if (locked.length === 0) return false;
-    const picked = locked[Math.floor(Math.random() * locked.length)];
-    unlocked.add(trackDB.indexOf(picked));
-    refreshMusicPlayer();
-    return true;
+  const secretMap = [
+    // Classic mode (MORTAL SVN)
+    { mode: false, match: function(e) { var s = e.target.closest('.window-menubar span'); return s && s.textContent.trim() === 'File'; }, idx: 0 },
+    { mode: false, match: function(e) { var s = e.target.closest('.window-menubar span'); return s && s.textContent.trim() === 'Edit'; }, idx: 1 },
+    { mode: false, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'budget.xlsx'; }, idx: 2 },
+    { mode: false, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'readme.txt'; }, idx: 3 },
+    { mode: false, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'album-cover.jpg'; }, idx: 4 },
+    { mode: false, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'build.bat'; }, idx: 5 },
+    { mode: false, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'track1.mp3'; }, idx: 6 },
+    { mode: false, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'wallpaper-dark.png'; }, idx: 7 },
+    // Dark mode (FROSTFIRE)
+    { mode: true, match: function(e) { var s = e.target.closest('.window-menubar span'); return s && s.textContent.trim() === 'View'; }, idx: 8 },
+    { mode: true, match: function(e) { var s = e.target.closest('.window-menubar span'); return s && s.textContent.trim() === 'Help'; }, idx: 9 },
+    { mode: true, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'notes.txt'; }, idx: 10 },
+    { mode: true, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'readme.md'; }, idx: 11 },
+    { mode: true, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'track2.mp3'; }, idx: 12 },
+    { mode: true, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'index.html'; }, idx: 13 },
+    { mode: true, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'style.css'; }, idx: 14 },
+    { mode: true, match: function(e) { var f = e.target.closest('.file-grid-item'); return f && f.dataset.name === 'desktop.js'; }, idx: 15 },
+  ];
+
+  function tryUnlock(e) {
+    for (var i = 0; i < secretMap.length; i++) {
+      var entry = secretMap[i];
+      if (entry.mode === darkMode && entry.match(e) && !unlocked.has(entry.idx)) {
+        unlocked.add(entry.idx);
+        refreshMusicPlayer();
+        return true;
+      }
+    }
+    return false;
   }
 
   function refreshMusicPlayer() {
@@ -1229,9 +1250,7 @@
   }
 
   /* ========== SECRET UNLOCK TRIGGERS ========== */
-  WINDOW_MANAGER.addEventListener('click', function (e) {
-    if (e.target.closest('.window-menubar span')) unlockRandomTrack();
-  });
+  document.addEventListener('click', function (e) { tryUnlock(e); });
 
   /* ========== KEYBOARD SHORTCUTS ========== */
   document.addEventListener('keydown', function (e) {
