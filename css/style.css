@@ -943,6 +943,153 @@ html, body {
   to { opacity: 1; }
 }
 
+/* === DARK MODE OVERRIDES (Ctrl+Shift+D) === */
+.dark-mode {
+  --bg-desktop: #0a0a0f;
+  --bg-window: #1a1a24;
+  --bg-title: #0a0a14;
+  --bg-title-inactive: #2a2a3a;
+  --bg-taskbar: #1a1a24;
+  --bg-button: #2a2a3a;
+  --bg-button-hover: #3a3a4a;
+  --bg-input: #12121a;
+  --bg-start-menu: #1a1a24;
+  --bg-start-sidebar: #0a0a14;
+
+  --border-light: #3a3a4a;
+  --border-dark: #0a0a0a;
+  --border-shadow: #2a2a3a;
+  --border-highlight: #4a4a5a;
+
+  --text-primary: #c8c8d0;
+  --text-title: #e0e0f0;
+  --text-title-inactive: #8888a0;
+  --text-disabled: #6666a0;
+  --text-bright: #e0e0ff;
+
+  --accent: #4a4a8a;
+  --accent-glow: #6666aa;
+}
+
+.dark-mode #desktop {
+  background: var(--bg-desktop);
+}
+
+.dark-mode .window.active .window-titlebar {
+  background: linear-gradient(90deg, #0a0a14, #2a2a4a);
+}
+
+.dark-mode .window-titlebar {
+  background: var(--bg-title-inactive);
+}
+
+.dark-mode .window-content {
+  background: #16161f;
+}
+
+.dark-mode .window-menubar span {
+  color: var(--text-primary);
+}
+
+.dark-mode .window-menubar span:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.dark-mode .settings-group h3 {
+  color: var(--text-primary);
+}
+
+.dark-mode .settings-row select {
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.dark-mode .mp-playlist {
+  background: #16161f;
+  border-right-color: var(--border-shadow);
+}
+
+.dark-mode .mp-album-header {
+  background: #1a1a24;
+  color: #8888cc;
+}
+
+.dark-mode .mp-cover {
+  background: #1a1a24;
+}
+
+.dark-mode .mp-now-label {
+  color: var(--text-bright);
+}
+
+.dark-mode .desktop-icon:hover {
+  background: rgba(100, 100, 170, 0.15);
+}
+
+.dark-mode .desktop-icon.selected {
+  background: rgba(100, 100, 170, 0.2);
+}
+
+.dark-mode #start-sidebar {
+  background: linear-gradient(180deg, #0a0a14, #1a1a2e);
+}
+
+.dark-mode .start-item {
+  color: var(--text-primary);
+}
+
+.dark-mode .shutdown-dialog {
+  background: var(--bg-window);
+}
+
+.dark-mode .shutdown-dialog p {
+  color: var(--text-primary);
+}
+
+.dark-mode .file-browser-nav {
+  background: var(--bg-button);
+  color: var(--text-primary);
+}
+
+.dark-mode .mp-track:hover {
+  background: rgba(74, 74, 138, 0.25);
+}
+
+.dark-mode .mp-track.active {
+  background: rgba(74, 74, 138, 0.35);
+}
+
+.dark-mode .mp-track.selected {
+  background: rgba(74, 74, 138, 0.2);
+}
+
+.dark-mode .mp-track.active .mp-track-icon {
+  color: #8888cc;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+  background: #1a1a24;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: #2a2a3a;
+  border-color: var(--border-shadow);
+}
+
+.dark-mode ::-webkit-scrollbar-button {
+  background: #2a2a3a;
+  border-color: var(--border-shadow);
+}
+
+.dark-mode ::-webkit-scrollbar-corner {
+  background: #1a1a24;
+}
+
+.dark-mode .shutdown-screen .msg {
+  color: #8888c0;
+}
+
 /* === Responsive tweaks === */
 @media (max-width: 600px) {
   #start-menu {

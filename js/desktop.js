@@ -7,6 +7,7 @@
   let selectedIcon = null;
   let startMenuOpen = false;
   let shutdownOverlay = null;
+  let darkMode = false;
 
   const DESKTOP = document.getElementById('desktop');
   const WINDOW_MANAGER = document.getElementById('window-manager');
@@ -291,7 +292,7 @@
         <h3>Appearance</h3>
         <div class="settings-row">
           <label>Desktop Theme</label>
-          <select><option selected>Windows 98 Dark (current)</option><option disabled>Coming soon...</option></select>
+          <select><option selected>Windows 98 Classic</option><option disabled>Coming soon...</option></select>
         </div>
         <div class="settings-row">
           <label>Accent Color</label>
@@ -343,29 +344,32 @@
     { album: 'MORTAL SVN', file: 'MORTAL SUN.mp3', icon: '⊙' },
     { album: 'MORTAL SVN', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
     { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '⨁' },
-    { album: 'MORTAL SVN', file: 'UNDER THE MORTAL SUN.mp3', icon: '☀' },
     { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
-    { album: 'FROSTFIRE', file: 'SIGNAL LOST.mp3', icon: '✜' },
+    { album: 'MORTAL SVN', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '⟡' },
     { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
     { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '🔥' },
     { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '▣' },
     { album: 'FROSTFIRE', file: 'MORTAL SVN.mp3', icon: '⊙' },
     { album: 'FROSTFIRE', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
-    { album: 'FROSTFIRE', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '⟡' },
     { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
     { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '⨁' },
     { album: 'FROSTFIRE', file: 'AMBER GLASS.mp3', icon: '◆' },
   ];
+
+  function getFilteredTracks() {
+    return trackDB.filter(function (t) { return t.album === (darkMode ? 'FROSTFIRE' : 'MORTAL SVN'); });
+  }
 
   miniApps.music = {
     title: 'Music Player',
     icon: '<img src="assets/icons/sound.png" width="16" height="16">',
     width: 600,
     height: 440,
-    statusText: 'Ready | 18 tracks',
+    statusText: 'Ready | 16 tracks',
     content: function () {
+      const tracks = getFilteredTracks();
       let albumHtml = '', currentAlbum = '';
-      trackDB.forEach(function (t, i) {
+      tracks.forEach(function (t, i) {
         const albumName = t.album;
         if (albumName !== currentAlbum) {
           if (currentAlbum) albumHtml += '</div>';
@@ -424,6 +428,7 @@
 
       let currentIndex = -1;
       let isPlaying = false;
+      let tracks = getFilteredTracks();
 
       function formatTime(s) {
         if (isNaN(s)) return '0:00';
@@ -433,11 +438,12 @@
       }
 
       function loadTrack(index) {
-        if (index < 0 || index >= trackDB.length) return;
+        tracks = getFilteredTracks();
+        if (index < 0 || index >= tracks.length) return;
         el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('active'); });
         const row = el.querySelector('.mp-track[data-index="' + index + '"]');
         if (row) row.classList.add('active');
-        const t = trackDB[index];
+        const t = tracks[index];
         currentIndex = index;
         const filePath = 'assets/music/' + t.album + '/' + encodeURIComponent(t.file);
         audio.src = filePath;
@@ -448,7 +454,8 @@
       }
 
       function togglePlay() {
-        if (!audio.src) { if (trackDB.length) loadTrack(0); }
+        tracks = getFilteredTracks();
+        if (!audio.src) { if (tracks.length) loadTrack(0); }
         if (audio.paused) {
           audio.play();
         } else {
@@ -459,7 +466,7 @@
       audio.addEventListener('play', function () {
         isPlaying = true;
         playBtn.textContent = '⏸';
-        statusbar.innerHTML = '<span style="flex:1;">Playing — ' + trackDB[currentIndex].file.replace('.mp3', '') + '</span><span class="resize-grip">▤</span>';
+        statusbar.innerHTML = '<span style="flex:1;">Playing — ' + tracks[currentIndex].file.replace('.mp3', '') + '</span><span class="resize-grip">▤</span>';
       });
 
       audio.addEventListener('pause', function () {
@@ -469,7 +476,8 @@
       });
 
       audio.addEventListener('ended', function () {
-        if (currentIndex < trackDB.length - 1) loadTrack(currentIndex + 1);
+        tracks = getFilteredTracks();
+        if (currentIndex < tracks.length - 1) loadTrack(currentIndex + 1);
         else { isPlaying = false; playBtn.textContent = '▶'; }
       });
 
@@ -495,7 +503,8 @@
       });
 
       nextBtn.addEventListener('click', function () {
-        if (currentIndex < trackDB.length - 1) loadTrack(currentIndex + 1);
+        tracks = getFilteredTracks();
+        if (currentIndex < tracks.length - 1) loadTrack(currentIndex + 1);
       });
 
       el.querySelectorAll('.mp-track').forEach(function (row) {
@@ -524,7 +533,7 @@
         volFill.style.width = (pct * 100) + '%';
       });
 
-      if (trackDB.length) { loadTrack(0); }
+      if (tracks.length) { loadTrack(0); }
     }
   };
 
@@ -1151,10 +1160,58 @@
     screen.className = 'shutdown-screen';
     screen.innerHTML = `
       <div class="logo">🖥️</div>
-      <div class="msg">Windows 98 Dark is shutting down...</div>
+      <div class="msg">Windows 98 is shutting down...</div>
       <div class="submsg">trippa.day</div>
     `;
     document.body.appendChild(screen);
+  }
+
+  /* ========== SECRET DARK MODE ========== */
+  function toggleDarkMode() {
+    darkMode = !darkMode;
+    document.body.classList.toggle('dark-mode', darkMode);
+    /* Refresh any open music player windows */
+    Object.keys(windows).forEach(function (id) {
+      const w = windows[id];
+      if (w.config && w.config.title === 'Music Player') {
+        const contentEl = w.el.querySelector('.window-content');
+        /* Rebuild the playlist content */
+        const tracks = getFilteredTracks();
+        let albumHtml = '', currentAlbum = '';
+        tracks.forEach(function (t, i) {
+          const albumName = t.album;
+          if (albumName !== currentAlbum) {
+            if (currentAlbum) albumHtml += '</div>';
+            albumHtml += '<div class="mp-album-header">' + albumName + '</div><div class="mp-tracks">';
+            currentAlbum = albumName;
+          }
+          const label = t.file.replace('.mp3', '');
+          albumHtml += '<div class="mp-track" data-index="' + i + '"><span class="mp-track-icon">' + t.icon + '</span><span class="mp-track-label">' + label + '</span><span class="mp-track-dur" id="mp-dur-' + i + '">--:--</span></div>';
+        });
+        if (currentAlbum) albumHtml += '</div>';
+        const listEl = contentEl.querySelector('.mp-playlist');
+        if (listEl) {
+          listEl.innerHTML = albumHtml;
+          /* Rebind click/dblclick on tracks */
+          listEl.querySelectorAll('.mp-track').forEach(function (row) {
+            row.addEventListener('dblclick', function () {
+              const wi = this.closest('.window').dataset.windowId;
+              if (!windows[wi]) return;
+              const a = windows[wi].el.querySelector('#mp-audio');
+              if (!a) return;
+              const t = getFilteredTracks();
+              const idx = parseInt(this.dataset.index);
+              if (idx >= 0 && idx < t.length) {
+                a.src = 'assets/music/' + t[idx].album + '/' + encodeURIComponent(t[idx].file);
+                a.load();
+                a.play();
+              }
+            });
+          });
+        }
+        w.el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;">' + (darkMode ? 'FROSTFIRE' : 'MORTAL SVN') + ' — ' + tracks.length + ' tracks</span><span class="resize-grip">▤</span>';
+      }
+    });
   }
 
   /* ========== KEYBOARD SHORTCUTS ========== */
@@ -1169,6 +1226,10 @@
     if ((e.ctrlKey && e.key === 'Escape') || e.key === 'Meta') {
       e.preventDefault();
       toggleStartMenu();
+    }
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+      e.preventDefault();
+      toggleDarkMode();
     }
   });
 
