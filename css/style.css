@@ -657,6 +657,188 @@ html, body {
   transform: scale(1.2);
 }
 
+/* === Music Player === */
+.mp-container {
+  display: flex;
+  height: 100%;
+  gap: 0;
+}
+
+.mp-playlist {
+  width: 200px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  background: var(--bg-input);
+  border-right: 1px solid var(--border-shadow);
+}
+
+.mp-album-header {
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--accent);
+  background: var(--bg-button);
+  border-bottom: 1px solid var(--border-shadow);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+}
+
+.mp-track {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  cursor: pointer;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.mp-track:hover {
+  background: rgba(74, 111, 165, 0.2);
+}
+
+.mp-track.active {
+  background: rgba(74, 111, 165, 0.35);
+}
+
+.mp-track.selected {
+  background: rgba(74, 111, 165, 0.25);
+}
+
+.mp-track-icon {
+  font-size: 10px;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+  color: var(--text-disabled);
+}
+
+.mp-track.active .mp-track-icon {
+  color: var(--accent);
+}
+
+.mp-track-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-track-dur {
+  font-size: 9px;
+  color: var(--text-disabled);
+  flex-shrink: 0;
+}
+
+.mp-player {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.mp-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.mp-cover {
+  font-size: 48px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border-shadow);
+  flex-shrink: 0;
+}
+
+.mp-now {
+  flex: 1;
+  min-width: 0;
+}
+
+.mp-now-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-now-sub {
+  font-size: 10px;
+  color: var(--text-disabled);
+  margin-top: 2px;
+}
+
+.mp-progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.mp-time {
+  font-size: 10px;
+  font-family: var(--font-pixel);
+  color: var(--text-disabled);
+  min-width: 32px;
+  text-align: center;
+}
+
+.mp-bar {
+  flex: 1;
+  height: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-shadow);
+  cursor: pointer;
+  position: relative;
+}
+
+.mp-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+.mp-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mp-btn {
+  font-size: 13px !important;
+  line-height: 1;
+}
+
+.mp-btn-play {
+  font-size: 15px !important;
+}
+
+.mp-volume {
+  width: 60px;
+  height: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-shadow);
+  cursor: pointer;
+  position: relative;
+}
+
+.mp-volume-fill {
+  height: 100%;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
 /* === Resize Grip === */
 .resize-grip {
   font-size: 10px;

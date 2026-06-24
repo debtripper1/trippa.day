@@ -118,14 +118,6 @@
 
   function getAppConfig(appType) {
     const appConfigs = {
-      music: {
-        title: 'Music Player',
-        icon: '🎵',
-        width: 520,
-        height: 380,
-        statusText: 'Ready',
-        content: getMusicContent()
-      },
       files: {
         title: 'File Browser',
         icon: '📁',
@@ -184,24 +176,6 @@
   }
 
   /* ========== APP CONTENT ========== */
-  function getMusicContent() {
-    return `
-      <div style="padding:4px;border-bottom:1px solid var(--border-shadow);display:flex;gap:4px;margin-bottom:8px;">
-        <span class="btn-98" style="padding:2px 8px;">▶ Play</span>
-        <span class="btn-98" style="padding:2px 8px;">⏸ Pause</span>
-        <span class="btn-98" style="padding:2px 8px;">⏹ Stop</span>
-        <span style="margin-left:auto;font-size:10px;color:var(--text-disabled);align-self:center;">Now Playing: —</span>
-      </div>
-      <div style="margin-bottom:8px;padding:4px;background:var(--bg-input);text-align:center;border:1px solid var(--border-shadow);">
-        <div style="font-size:28px;padding:12px 0;color:var(--accent);">🎵</div>
-        <div style="font-size:10px;color:var(--text-disabled);">No tracks loaded</div>
-      </div>
-      <div style="font-size:10px;color:var(--text-disabled);text-align:center;">
-        Drop music files here or use File &gt; Open to load tracks.
-      </div>
-    `;
-  }
-
   function getFilesContent() {
     return `<div class="file-browser" data-path="root"><div class="file-browser-nav">C:\\</div><div class="file-grid">${renderDir('root')}</div></div>`;
   }
@@ -211,7 +185,7 @@
     'Music': { 'track1.mp3': { type: 'file', icon: '🎵', size: '5.2 MB' }, 'track2.mp3': { type: 'file', icon: '🎵', size: '4.8 MB' }, 'album-cover.jpg': { type: 'file', icon: '🖼️', size: '124 KB' } },
     'Documents': { 'notes.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'readme.md': { type: 'file', icon: '📄', size: '8 KB' }, 'budget.xlsx': { type: 'file', icon: '📊', size: '64 KB' } },
     'Downloads': { 'trippa-theme-v1.zip': { type: 'file', icon: '📄', size: '2.4 MB' }, 'wallpaper-dark.png': { type: 'file', icon: '🖼️', size: '856 KB' }, 'music-setup.msi': { type: 'file', icon: '💿', size: '14.2 MB' }, 'readme.txt': { type: 'file', icon: '📄', size: '2 KB' } },
-    'Apps': { 'Snake': { type: 'app', icon: '🐍', app: 'snake' }, 'Notepad': { type: 'app', icon: '📝', app: 'notepad' }, 'Paint': { type: 'app', icon: '🖌️', app: 'paint' }, 'Calculator': { type: 'app', icon: '🧮', app: 'calc' } },
+    'Apps': { 'Snake': { type: 'app', icon: '🐍', app: 'snake' }, 'Notepad': { type: 'app', icon: '📝', app: 'notepad' }, 'Paint': { type: 'app', icon: '🖌️', app: 'paint' }, 'Calculator': { type: 'app', icon: '🧮', app: 'calc' }, 'Music Player': { type: 'app', icon: '🎵', app: 'music' } },
     'Projects': { 'index.html': { type: 'file', icon: '📄', size: '3 KB' }, 'style.css': { type: 'file', icon: '📄', size: '12 KB' }, 'desktop.js': { type: 'file', icon: '📄', size: '18 KB' }, 'build.bat': { type: 'file', icon: '⚙️', size: '1 KB' } },
     'Desktop': {
       'Snake Game': { type: 'app', icon: '🐍', app: 'snake' },
@@ -361,6 +335,205 @@
 
   /* ========== MINI APPS ========== */
   const miniApps = {};
+
+  const trackDB = [
+    { album: 'MORTAL SVN', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
+    { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '⨁' },
+    { album: 'MORTAL SVN', file: 'UNDER THE MORTAL SUN.mp3', icon: '☀' },
+    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
+    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL PART I.mp3', icon: '▲' },
+    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL PART II.mp3', icon: '▲' },
+    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
+    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE PART I.mp3', icon: '⊡' },
+    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE PART II.mp3', icon: '⊡' },
+    { album: 'MORTAL SVN', file: 'BURIED IN THE WELL.mp3', icon: '⛒' },
+    { album: 'MORTAL SVN', file: 'BURNED ALIVE.mp3', icon: '🔥' },
+    { album: 'MORTAL SVN', file: 'BURNED ALIVE PART I.mp3', icon: '🔥' },
+    { album: 'MORTAL SVN', file: 'BURNED ALIVE PART II.mp3', icon: '🔥' },
+    { album: 'MORTAL SVN', file: 'MORTAL SUN.mp3', icon: '⊙' },
+    { album: 'MORTAL SVN', file: 'SUNDRUNK CORROSION PART I.mp3', icon: '⟡' },
+    { album: 'MORTAL SVN', file: 'SUNDRUNK CORROSION PART II.mp3', icon: '⟡' },
+    { album: 'FROSTFIRE', file: 'WATERTANK HARVEST.mp3', icon: '⛏' },
+    { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
+    { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '🔥' },
+    { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '▣' },
+    { album: 'FROSTFIRE', file: 'MORTAL SVN.mp3', icon: '⊙' },
+    { album: 'FROSTFIRE', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
+    { album: 'FROSTFIRE', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '⟡' },
+    { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
+    { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '⨁' },
+  ];
+
+  miniApps.music = {
+    title: 'Music Player',
+    icon: '🎵',
+    width: 600,
+    height: 440,
+    statusText: 'Ready | 25 tracks',
+    content: function () {
+      let albumHtml = '', currentAlbum = '';
+      trackDB.forEach(function (t, i) {
+        const albumName = t.album;
+        if (albumName !== currentAlbum) {
+          if (currentAlbum) albumHtml += '</div>';
+          albumHtml += '<div class="mp-album-header">' + albumName + '</div><div class="mp-tracks">';
+          currentAlbum = albumName;
+        }
+        const label = t.file.replace('.mp3', '');
+        albumHtml += '<div class="mp-track" data-index="' + i + '"><span class="mp-track-icon">' + t.icon + '</span><span class="mp-track-label">' + label + '</span><span class="mp-track-dur" id="mp-dur-' + i + '">--:--</span></div>';
+      });
+      if (currentAlbum) albumHtml += '</div>';
+
+      return `
+        <div class="mp-container">
+          <div class="mp-playlist">${albumHtml}</div>
+          <div class="mp-player">
+            <div class="mp-info">
+              <div class="mp-cover">🎵</div>
+              <div class="mp-now">
+                <div class="mp-now-label" id="mp-now-label">No track selected</div>
+                <div class="mp-now-sub" id="mp-now-sub">—</div>
+              </div>
+            </div>
+            <div class="mp-progress">
+              <span class="mp-time" id="mp-time-current">0:00</span>
+              <div class="mp-bar" id="mp-bar"><div class="mp-bar-fill" id="mp-bar-fill"></div></div>
+              <span class="mp-time" id="mp-time-total">0:00</span>
+            </div>
+            <div class="mp-controls">
+              <span class="btn-98 mp-btn" id="mp-prev" style="padding:2px 10px;">⏮</span>
+              <span class="btn-98 mp-btn mp-btn-play" id="mp-play" style="padding:2px 16px;">▶</span>
+              <span class="btn-98 mp-btn" id="mp-next" style="padding:2px 10px;">⏭</span>
+              <span style="flex:1;"></span>
+              <span style="font-size:10px;color:var(--text-disabled);align-self:center;">Vol</span>
+              <div class="mp-volume" id="mp-volume"><div class="mp-volume-fill" id="mp-volume-fill" style="width:70%"></div></div>
+            </div>
+            <audio id="mp-audio" style="display:none;"></audio>
+          </div>
+        </div>
+      `;
+    },
+    init: function (winId) {
+      const el = windows[winId].el;
+      const audio = el.querySelector('#mp-audio');
+      const playBtn = el.querySelector('#mp-play');
+      const prevBtn = el.querySelector('#mp-prev');
+      const nextBtn = el.querySelector('#mp-next');
+      const bar = el.querySelector('#mp-bar');
+      const barFill = el.querySelector('#mp-bar-fill');
+      const volBar = el.querySelector('#mp-volume');
+      const volFill = el.querySelector('#mp-volume-fill');
+      const timeCur = el.querySelector('#mp-time-current');
+      const timeTot = el.querySelector('#mp-time-total');
+      const nowLabel = el.querySelector('#mp-now-label');
+      const nowSub = el.querySelector('#mp-now-sub');
+      const statusbar = el.querySelector('.window-statusbar');
+
+      let currentIndex = -1;
+      let isPlaying = false;
+
+      function formatTime(s) {
+        if (isNaN(s)) return '0:00';
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return m + ':' + (sec < 10 ? '0' : '') + sec;
+      }
+
+      function loadTrack(index) {
+        if (index < 0 || index >= trackDB.length) return;
+        el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('active'); });
+        const row = el.querySelector('.mp-track[data-index="' + index + '"]');
+        if (row) row.classList.add('active');
+        const t = trackDB[index];
+        currentIndex = index;
+        const filePath = 'assets/music/' + t.album + '/' + encodeURIComponent(t.file);
+        audio.src = filePath;
+        audio.load();
+        nowLabel.textContent = t.file.replace('.mp3', '');
+        nowSub.textContent = t.album;
+        if (isPlaying) { audio.play(); }
+      }
+
+      function togglePlay() {
+        if (!audio.src) { if (trackDB.length) loadTrack(0); }
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      }
+
+      audio.addEventListener('play', function () {
+        isPlaying = true;
+        playBtn.textContent = '⏸';
+        statusbar.innerHTML = '<span style="flex:1;">Playing — ' + trackDB[currentIndex].file.replace('.mp3', '') + '</span><span class="resize-grip">▤</span>';
+      });
+
+      audio.addEventListener('pause', function () {
+        isPlaying = false;
+        playBtn.textContent = '▶';
+        statusbar.innerHTML = '<span style="flex:1;">Paused</span><span class="resize-grip">▤</span>';
+      });
+
+      audio.addEventListener('ended', function () {
+        if (currentIndex < trackDB.length - 1) loadTrack(currentIndex + 1);
+        else { isPlaying = false; playBtn.textContent = '▶'; }
+      });
+
+      audio.addEventListener('timeupdate', function () {
+        if (!audio.duration) return;
+        const pct = (audio.currentTime / audio.duration) * 100;
+        barFill.style.width = pct + '%';
+        timeCur.textContent = formatTime(audio.currentTime);
+        const durRow = el.querySelector('#mp-dur-' + currentIndex);
+        if (durRow && durRow.textContent === '--:--') durRow.textContent = formatTime(audio.duration);
+      });
+
+      audio.addEventListener('loadedmetadata', function () {
+        timeTot.textContent = formatTime(audio.duration);
+        const durRow = el.querySelector('#mp-dur-' + currentIndex);
+        if (durRow) durRow.textContent = formatTime(audio.duration);
+      });
+
+      playBtn.addEventListener('click', togglePlay);
+
+      prevBtn.addEventListener('click', function () {
+        if (currentIndex > 0) loadTrack(currentIndex - 1);
+      });
+
+      nextBtn.addEventListener('click', function () {
+        if (currentIndex < trackDB.length - 1) loadTrack(currentIndex + 1);
+      });
+
+      el.querySelectorAll('.mp-track').forEach(function (row) {
+        row.addEventListener('dblclick', function () {
+          loadTrack(parseInt(this.dataset.index));
+          isPlaying = true;
+          audio.play();
+        });
+        row.addEventListener('click', function () {
+          el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('selected'); });
+          this.classList.add('selected');
+        });
+      });
+
+      bar.addEventListener('click', function (e) {
+        if (!audio.duration) return;
+        const rect = this.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = pct * audio.duration;
+      });
+
+      volBar.addEventListener('click', function (e) {
+        const rect = this.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        audio.volume = pct;
+        volFill.style.width = (pct * 100) + '%';
+      });
+
+      if (trackDB.length) { loadTrack(0); }
+    }
+  };
 
   miniApps.snake = {
     title: 'Snake',
