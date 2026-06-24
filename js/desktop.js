@@ -8,6 +8,7 @@
   let startMenuOpen = false;
   let shutdownOverlay = null;
   let darkMode = false;
+  let unlocked = new Set();
 
   const DESKTOP = document.getElementById('desktop');
   const WINDOW_MANAGER = document.getElementById('window-manager');
@@ -247,6 +248,9 @@
         if (app) openWindow(app);
       });
     });
+    el.querySelectorAll('.file-grid-item[data-type="file"]').forEach(item => {
+      item.addEventListener('dblclick', function () { unlockRandomTrack(); });
+    });
     const upBtn = el.querySelector('.nav-up');
     if (upBtn) {
       upBtn.addEventListener('click', function () {
@@ -340,13 +344,12 @@
   }
 
   function getRecycleContent() {
-    const mode = darkMode ? 'classic' : 'dark';
     return `
       <div style="text-align:center;padding:20px 0;">
         <div style="font-size:48px;margin-bottom:12px;opacity:0.4;">🗑️</div>
         <div style="color:var(--text-disabled);font-size:11px;">Recycle Bin is empty</div>
         <div style="margin-top:16px;">
-          <span class="btn-98" id="recycle-toggle">Empty Recycle Bin (switch to ${mode})</span>
+          <span class="btn-98" id="recycle-toggle">Empty Recycle Bin</span>
         </div>
       </div>
     `;
@@ -375,7 +378,42 @@
   ];
 
   function getFilteredTracks() {
-    return trackDB.filter(function (t) { return t.album === (darkMode ? 'FROSTFIRE' : 'MORTAL SVN'); });
+    return trackDB.filter(function (t, i) { return unlocked.has(i); });
+  }
+
+  function unlockRandomTrack() {
+    const pool = trackDB.filter(function (t) { return t.album === (darkMode ? 'FROSTFIRE' : 'MORTAL SVN'); });
+    const locked = pool.filter(function (t) { return !unlocked.has(trackDB.indexOf(t)); });
+    if (locked.length === 0) return false;
+    const picked = locked[Math.floor(Math.random() * locked.length)];
+    unlocked.add(trackDB.indexOf(picked));
+    refreshMusicPlayer();
+    return true;
+  }
+
+  function refreshMusicPlayer() {
+    Object.keys(windows).forEach(function (id) {
+      const w = windows[id];
+      if (w.config && w.config.title === 'Music Player') {
+        const contentEl = w.el.querySelector('.window-content');
+        if (!contentEl) return;
+        const tracks = getFilteredTracks();
+        let albumHtml = '', currentAlbum = '';
+        tracks.forEach(function (t, i) {
+          if (t.album !== currentAlbum) {
+            if (currentAlbum) albumHtml += '</div>';
+            albumHtml += '<div class="mp-album-header">' + t.album + '</div><div class="mp-tracks">';
+            currentAlbum = t.album;
+          }
+          const label = t.file.replace('.mp3', '');
+          albumHtml += '<div class="mp-track" data-index="' + i + '"><span class="mp-track-icon">' + t.icon + '</span><span class="mp-track-label">' + label + '</span><span class="mp-track-dur" id="mp-dur-' + i + '">--:--</span></div>';
+        });
+        if (currentAlbum) albumHtml += '</div>';
+        const listEl = contentEl.querySelector('.mp-playlist');
+        if (listEl) listEl.innerHTML = albumHtml;
+        w.el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;">' + tracks.length + ' tracks unlocked</span><span class="resize-grip">▤</span>';
+      }
+    });
   }
 
   miniApps.music = {
@@ -383,7 +421,7 @@
     icon: '<img src="assets/icons/sound.png" width="16" height="16">',
     width: 600,
     height: 440,
-    statusText: 'Ready | 16 tracks',
+    statusText: 'Music Player',
     content: function () {
       const tracks = getFilteredTracks();
       let albumHtml = '', currentAlbum = '';
@@ -1188,49 +1226,12 @@
   function toggleDarkMode() {
     darkMode = !darkMode;
     document.body.classList.toggle('dark-mode', darkMode);
-    /* Refresh any open music player windows */
-    Object.keys(windows).forEach(function (id) {
-      const w = windows[id];
-      if (w.config && w.config.title === 'Music Player') {
-        const contentEl = w.el.querySelector('.window-content');
-        /* Rebuild the playlist content */
-        const tracks = getFilteredTracks();
-        let albumHtml = '', currentAlbum = '';
-        tracks.forEach(function (t, i) {
-          const albumName = t.album;
-          if (albumName !== currentAlbum) {
-            if (currentAlbum) albumHtml += '</div>';
-            albumHtml += '<div class="mp-album-header">' + albumName + '</div><div class="mp-tracks">';
-            currentAlbum = albumName;
-          }
-          const label = t.file.replace('.mp3', '');
-          albumHtml += '<div class="mp-track" data-index="' + i + '"><span class="mp-track-icon">' + t.icon + '</span><span class="mp-track-label">' + label + '</span><span class="mp-track-dur" id="mp-dur-' + i + '">--:--</span></div>';
-        });
-        if (currentAlbum) albumHtml += '</div>';
-        const listEl = contentEl.querySelector('.mp-playlist');
-        if (listEl) {
-          listEl.innerHTML = albumHtml;
-          /* Rebind click/dblclick on tracks */
-          listEl.querySelectorAll('.mp-track').forEach(function (row) {
-            row.addEventListener('dblclick', function () {
-              const wi = this.closest('.window').dataset.windowId;
-              if (!windows[wi]) return;
-              const a = windows[wi].el.querySelector('#mp-audio');
-              if (!a) return;
-              const t = getFilteredTracks();
-              const idx = parseInt(this.dataset.index);
-              if (idx >= 0 && idx < t.length) {
-                a.src = 'assets/music/' + t[idx].album + '/' + encodeURIComponent(t[idx].file);
-                a.load();
-                a.play();
-              }
-            });
-          });
-        }
-        w.el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;">' + (darkMode ? 'FROSTFIRE' : 'MORTAL SVN') + ' — ' + tracks.length + ' tracks</span><span class="resize-grip">▤</span>';
-      }
-    });
   }
+
+  /* ========== SECRET UNLOCK TRIGGERS ========== */
+  WINDOW_MANAGER.addEventListener('click', function (e) {
+    if (e.target.closest('.window-menubar span')) unlockRandomTrack();
+  });
 
   /* ========== KEYBOARD SHORTCUTS ========== */
   document.addEventListener('keydown', function (e) {
