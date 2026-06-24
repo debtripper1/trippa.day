@@ -90,6 +90,9 @@
       windows[id].currentPath = 'root';
       setTimeout(function () { bindFileClicks(id); }, 50);
     }
+    if (appType === 'recycle') {
+      setTimeout(function () { bindRecycleToggle(id); }, 50);
+    }
   }
 
   function buildWindowHTML(config, id) {
@@ -252,6 +255,20 @@
     }
   }
 
+  function bindRecycleToggle(winId) {
+    const w = windows[winId];
+    if (!w) return;
+    const btn = w.el.querySelector('#recycle-toggle');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        toggleDarkMode();
+        const contentEl = w.el.querySelector('.window-content');
+        contentEl.innerHTML = getRecycleContent();
+        bindRecycleToggle(winId);
+      });
+    }
+  }
+
   function getDownloadsContent() {
     const downloads = [
       { icon: '📄', name: 'trippa-theme-v1.zip', size: '2.4 MB' },
@@ -323,12 +340,13 @@
   }
 
   function getRecycleContent() {
+    const mode = darkMode ? 'classic' : 'dark';
     return `
       <div style="text-align:center;padding:20px 0;">
         <div style="font-size:48px;margin-bottom:12px;opacity:0.4;">🗑️</div>
         <div style="color:var(--text-disabled);font-size:11px;">Recycle Bin is empty</div>
         <div style="margin-top:16px;">
-          <span class="btn-98" disabled style="opacity:0.4;cursor:not-allowed;">Empty Recycle Bin</span>
+          <span class="btn-98" id="recycle-toggle">Empty Recycle Bin (switch to ${mode})</span>
         </div>
       </div>
     `;
@@ -1227,10 +1245,7 @@
       e.preventDefault();
       toggleStartMenu();
     }
-    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-      e.preventDefault();
-      toggleDarkMode();
-    }
+
   });
 
 })();
