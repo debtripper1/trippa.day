@@ -120,7 +120,7 @@
     const appConfigs = {
       files: {
         title: 'File Browser',
-        icon: '📁',
+        icon: '<img src="assets/icons/computer.png" width="16" height="16">',
         width: 580,
         height: 420,
         statusText: 'C:\\',
@@ -128,7 +128,7 @@
       },
       downloads: {
         title: 'Downloads',
-        icon: '📥',
+        icon: '<img src="assets/icons/download.png" width="16" height="16">',
         width: 500,
         height: 360,
         statusText: '0 items',
@@ -136,7 +136,7 @@
       },
       apps: {
         title: 'Web Apps',
-        icon: '🖥️',
+        icon: '<img src="assets/icons/world.png" width="16" height="16">',
         width: 480,
         height: 360,
         statusText: 'Available',
@@ -144,7 +144,7 @@
       },
       settings: {
         title: 'Settings',
-        icon: '⚙️',
+        icon: '<img src="assets/icons/settings.png" width="16" height="16">',
         width: 440,
         height: 400,
         statusText: 'System settings',
@@ -152,7 +152,7 @@
       },
       recycle: {
         title: 'Recycle Bin',
-        icon: '🗑️',
+        icon: '<img src="assets/icons/recycle_bin.png" width="16" height="16">',
         width: 460,
         height: 340,
         statusText: 'Empty',
@@ -185,15 +185,15 @@
     'Music': { 'track1.mp3': { type: 'file', icon: '🎵', size: '5.2 MB' }, 'track2.mp3': { type: 'file', icon: '🎵', size: '4.8 MB' }, 'album-cover.jpg': { type: 'file', icon: '🖼️', size: '124 KB' } },
     'Documents': { 'notes.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'readme.md': { type: 'file', icon: '📄', size: '8 KB' }, 'budget.xlsx': { type: 'file', icon: '📊', size: '64 KB' } },
     'Downloads': { 'trippa-theme-v1.zip': { type: 'file', icon: '📄', size: '2.4 MB' }, 'wallpaper-dark.png': { type: 'file', icon: '🖼️', size: '856 KB' }, 'music-setup.msi': { type: 'file', icon: '💿', size: '14.2 MB' }, 'readme.txt': { type: 'file', icon: '📄', size: '2 KB' } },
-    'Apps': { 'Snake': { type: 'app', icon: '🐍', app: 'snake' }, 'Notepad': { type: 'app', icon: '📝', app: 'notepad' }, 'Paint': { type: 'app', icon: '🖌️', app: 'paint' }, 'Calculator': { type: 'app', icon: '🧮', app: 'calc' }, 'Music Player': { type: 'app', icon: '🎵', app: 'music' } },
+    'Apps': { 'Snake': { type: 'app', icon: '<img src=\"assets/icons/program_manager.png\" width=\"28\" height=\"28\">', app: 'snake' }, 'Notepad': { type: 'app', icon: '<img src=\"assets/icons/notepad.png\" width=\"28\" height=\"28\">', app: 'notepad' }, 'Paint': { type: 'app', icon: '<img src=\"assets/icons/paint.png\" width=\"28\" height=\"28\">', app: 'paint' }, 'Calculator': { type: 'app', icon: '<img src=\"assets/icons/computer.png\" width=\"28\" height=\"28\">', app: 'calc' }, 'Music Player': { type: 'app', icon: '<img src=\"assets/icons/sound.png\" width=\"28\" height=\"28\">', app: 'music' } },
     'Projects': { 'index.html': { type: 'file', icon: '📄', size: '3 KB' }, 'style.css': { type: 'file', icon: '📄', size: '12 KB' }, 'desktop.js': { type: 'file', icon: '📄', size: '18 KB' }, 'build.bat': { type: 'file', icon: '⚙️', size: '1 KB' } },
     'Desktop': {
-      'Snake Game': { type: 'app', icon: '🐍', app: 'snake' },
-      'Notepad': { type: 'app', icon: '📝', app: 'notepad' },
-      'Paint': { type: 'app', icon: '🖌️', app: 'paint' },
-      'Calculator': { type: 'app', icon: '🧮', app: 'calc' },
-      'Minesweeper': { type: 'app', icon: '💣', app: 'minesweeper' },
-      'Music Player': { type: 'app', icon: '🎵', app: 'music' }
+      'Snake Game': { type: 'app', icon: '<img src=\"assets/icons/program_manager.png\" width=\"28\" height=\"28\">', app: 'snake' },
+      'Notepad': { type: 'app', icon: '<img src=\"assets/icons/notepad.png\" width=\"28\" height=\"28\">', app: 'notepad' },
+      'Paint': { type: 'app', icon: '<img src=\"assets/icons/paint.png\" width=\"28\" height=\"28\">', app: 'paint' },
+      'Calculator': { type: 'app', icon: '<img src=\"assets/icons/computer.png\" width=\"28\" height=\"28\">', app: 'calc' },
+      'Minesweeper': { type: 'app', icon: '<img src=\"assets/icons/help.png\" width=\"28\" height=\"28\">', app: 'minesweeper' },
+      'Music Player': { type: 'app', icon: '<img src=\"assets/icons/sound.png\" width=\"28\" height=\"28\">', app: 'music' }
     }
   };
 
@@ -359,7 +359,7 @@
 
   miniApps.music = {
     title: 'Music Player',
-    icon: '🎵',
+    icon: '<img src="assets/icons/sound.png" width="16" height="16">',
     width: 600,
     height: 440,
     statusText: 'Ready | 18 tracks',
@@ -530,7 +530,7 @@
 
   miniApps.snake = {
     title: 'Snake',
-    icon: '🐍',
+    icon: '<img src="assets/icons/program_manager.png" width="16" height="16">',
     width: 480,
     height: 440,
     statusText: 'Score: 0 | Use arrow keys',
@@ -605,8 +605,8 @@
       }
 
       function draw() {
-        ctx.fillStyle = 'var(--bg-input)';
-        ctx.fillRect(0, 0, 400, 360);
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, 400, 360);
         ctx.fillStyle = '#1a3a1a';
         snake.forEach(s => { ctx.fillRect(s.x * TILE + 1, s.y * TILE + 1, TILE - 2, TILE - 2); });
         ctx.fillStyle = '#4a6fa5';
@@ -645,7 +645,7 @@
 
   miniApps.notepad = {
     title: 'Notepad',
-    icon: '📝',
+    icon: '<img src="assets/icons/notepad.png" width="16" height="16">',
     width: 520,
     height: 400,
     statusText: 'Untitled',
@@ -689,7 +689,7 @@
 
   miniApps.paint = {
     title: 'Paint',
-    icon: '🖌️',
+    icon: '<img src="assets/icons/paint.png" width="16" height="16">',
     width: 600,
     height: 460,
     statusText: 'Ready',
@@ -760,7 +760,7 @@
 
   miniApps.calc = {
     title: 'Calculator',
-    icon: '🧮',
+    icon: '<img src="assets/icons/computer.png" width="16" height="16">',
     width: 280,
     height: 340,
     statusText: 'Ready',
@@ -823,7 +823,7 @@
 
   miniApps.minesweeper = {
     title: 'Minesweeper',
-    icon: '💣',
+    icon: '<img src="assets/icons/help.png" width="16" height="16">',
     width: 320,
     height: 380,
     statusText: 'Mines: 10',
