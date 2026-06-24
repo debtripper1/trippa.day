@@ -337,23 +337,15 @@
   const miniApps = {};
 
   const trackDB = [
+    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
+    { album: 'MORTAL SVN', file: 'BURIED IN THE WELL.mp3', icon: '⛒' },
+    { album: 'MORTAL SVN', file: 'BURNED ALIVE.mp3', icon: '🔥' },
+    { album: 'MORTAL SVN', file: 'MORTAL SUN.mp3', icon: '⊙' },
     { album: 'MORTAL SVN', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
     { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '⨁' },
     { album: 'MORTAL SVN', file: 'UNDER THE MORTAL SUN.mp3', icon: '☀' },
     { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
-    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL PART I.mp3', icon: '▲' },
-    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL PART II.mp3', icon: '▲' },
-    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
-    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE PART I.mp3', icon: '⊡' },
-    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE PART II.mp3', icon: '⊡' },
-    { album: 'MORTAL SVN', file: 'BURIED IN THE WELL.mp3', icon: '⛒' },
-    { album: 'MORTAL SVN', file: 'BURNED ALIVE.mp3', icon: '🔥' },
-    { album: 'MORTAL SVN', file: 'BURNED ALIVE PART I.mp3', icon: '🔥' },
-    { album: 'MORTAL SVN', file: 'BURNED ALIVE PART II.mp3', icon: '🔥' },
-    { album: 'MORTAL SVN', file: 'MORTAL SUN.mp3', icon: '⊙' },
-    { album: 'MORTAL SVN', file: 'SUNDRUNK CORROSION PART I.mp3', icon: '⟡' },
-    { album: 'MORTAL SVN', file: 'SUNDRUNK CORROSION PART II.mp3', icon: '⟡' },
-    { album: 'FROSTFIRE', file: 'WATERTANK HARVEST.mp3', icon: '⛏' },
+    { album: 'FROSTFIRE', file: 'SIGNAL LOST.wav', icon: '✜' },
     { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
     { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '🔥' },
     { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '▣' },
@@ -362,6 +354,7 @@
     { album: 'FROSTFIRE', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '⟡' },
     { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
     { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '⨁' },
+    { album: 'FROSTFIRE', file: 'AMBER GLASS.wav', icon: '◆' },
   ];
 
   miniApps.music = {
@@ -369,7 +362,7 @@
     icon: '🎵',
     width: 600,
     height: 440,
-    statusText: 'Ready | 25 tracks',
+    statusText: 'Ready | 18 tracks',
     content: function () {
       let albumHtml = '', currentAlbum = '';
       trackDB.forEach(function (t, i) {
