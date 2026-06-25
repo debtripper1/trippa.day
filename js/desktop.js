@@ -387,22 +387,22 @@
   const miniApps = {};
 
   const trackDB = [
-    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
-    { album: 'MORTAL SVN', file: 'BURIED IN THE WELL.mp3', icon: '⛒' },
-    { album: 'MORTAL SVN', file: 'BURNED ALIVE.mp3', icon: '🔥' },
-    { album: 'MORTAL SVN', file: 'MORTAL SUN.mp3', icon: '⊙' },
-    { album: 'MORTAL SVN', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
-    { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '⨁' },
-    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
-    { album: 'MORTAL SVN', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '⟡' },
-    { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '⊡' },
-    { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '🔥' },
-    { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '▣' },
-    { album: 'FROSTFIRE', file: 'MORTAL SVN.mp3', icon: '⊙' },
-    { album: 'FROSTFIRE', file: 'OCCAM\'S SLUMBER.mp3', icon: '☾' },
-    { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '▲' },
-    { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '⨁' },
-    { album: 'FROSTFIRE', file: 'AMBER GLASS.mp3', icon: '◆' },
+    { album: 'MORTAL SVN', file: 'AGAINST THE FENCE.mp3', icon: '<img src="assets/icons/soundgrn-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'BURIED IN THE WELL.mp3', icon: '<img src="assets/icons/soundpu2-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'BURNED ALIVE.mp3', icon: '<img src="assets/icons/soundpur-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'MORTAL SUN.mp3', icon: '<img src="assets/icons/soundtel-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'OCCAM\'S SLUMBER.mp3', icon: '<img src="assets/icons/soundvor-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '<img src="assets/icons/soundyel-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '<img src="assets/icons/cd_audio_cd-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '<img src="assets/icons/media_player-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '<img src="assets/icons/mixer_sound-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '<img src="assets/icons/multimedia-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '<img src="assets/icons/computer_sound-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'MORTAL SVN.mp3', icon: '<img src="assets/icons/executable_sound-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'OCCAM\'S SLUMBER.mp3', icon: '<img src="assets/icons/audio_compression-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '<img src="assets/icons/wia_img_color_sound-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '<img src="assets/icons/mixer_cd_sound-0.png" width="16" height="16">' },
+    { album: 'FROSTFIRE', file: 'AMBER GLASS.mp3', icon: '<img src="assets/icons/keyboard_musical.png" width="16" height="16">' },
   ];
 
   function getFilteredTracks() {
@@ -436,10 +436,35 @@
       if (entry.mode === darkMode && entry.match(e) && !unlocked.has(entry.idx)) {
         unlocked.add(entry.idx);
         refreshMusicPlayer();
+        showUnlockToast(entry.idx);
         return true;
       }
     }
     return false;
+  }
+
+  function showUnlockToast(idx) {
+    var existing = document.querySelector('.unlock-toast');
+    if (existing) existing.remove();
+    var t = trackDB[idx];
+    var toast = document.createElement('div');
+    toast.className = 'unlock-toast';
+    toast.innerHTML = '<div class="unlock-toast-icon">' + t.icon + '</div><div class="unlock-toast-body"><div class="unlock-toast-title">Song Unlocked!</div><div class="unlock-toast-name">' + t.file.replace('.mp3', '') + '</div><div class="unlock-toast-album">' + t.album + '</div></div><span class="btn-98 unlock-toast-play" style="padding:2px 8px;font-size:10px;">Play</span>';
+    toast.querySelector('.unlock-toast-play').addEventListener('click', function () {
+      toast.remove();
+      openApp('music');
+      setTimeout(function () {
+        var w = Object.keys(windows).find(function (id) { return windows[id].config && windows[id].config.title === 'Music Player'; });
+        if (!w) return;
+        var el = windows[w].el;
+        var filteredIdx = getFilteredTracks().indexOf(trackDB[idx]);
+        if (filteredIdx === -1) return;
+        var row = el.querySelector('.mp-track[data-index="' + filteredIdx + '"]');
+        if (row) row.click();
+      }, 100);
+    });
+    document.body.appendChild(toast);
+    setTimeout(function () { if (toast.parentNode) toast.remove(); }, 6000);
   }
 
   function refreshMusicPlayer() {
@@ -661,17 +686,24 @@
         if (currentIndex < tracks.length - 1) loadTrack(currentIndex + 1);
       });
 
-      el.querySelectorAll('.mp-track').forEach(function (row) {
-        row.addEventListener('dblclick', function () {
-          loadTrack(parseInt(this.dataset.index));
-          isPlaying = true;
-          if (audio.readyState >= 2) audio.play();
-          else playWhenReady(audio);
-        });
-        row.addEventListener('click', function () {
-          el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('selected'); });
-          this.classList.add('selected');
-        });
+      var playlistEl = el.querySelector('.mp-playlist');
+      playlistEl.addEventListener('dblclick', function (e) {
+        var row = e.target.closest('.mp-track');
+        if (!row) return;
+        loadTrack(parseInt(row.dataset.index));
+        isPlaying = true;
+        if (audio.readyState >= 2) audio.play();
+        else playWhenReady(audio);
+      });
+      playlistEl.addEventListener('click', function (e) {
+        var row = e.target.closest('.mp-track');
+        if (!row) return;
+        el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('selected'); });
+        row.classList.add('selected');
+        loadTrack(parseInt(row.dataset.index));
+        isPlaying = true;
+        if (audio.readyState >= 2) audio.play();
+        else playWhenReady(audio);
       });
 
       bar.addEventListener('click', function (e) {
