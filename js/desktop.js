@@ -535,7 +535,9 @@
               <span class="btn-98 mp-btn" id="mp-next" style="padding:2px 10px;">⏭</span>
               <span style="flex:1;"></span>
               <span style="font-size:10px;color:var(--text-disabled);align-self:center;">Vol</span>
+              <span class="btn-98 mp-btn mp-vol-arrow" id="mp-vol-down" style="padding:1px 6px;font-size:9px;">◀</span>
               <div class="mp-volume" id="mp-volume"><div class="mp-volume-fill" id="mp-volume-fill" style="width:70%"></div></div>
+              <span class="btn-98 mp-btn mp-vol-arrow" id="mp-vol-up" style="padding:1px 6px;font-size:9px;">▶</span>
             </div>
             <audio id="mp-audio" style="display:none;"></audio>
           </div>
@@ -552,6 +554,8 @@
       const barFill = el.querySelector('#mp-bar-fill');
       const volBar = el.querySelector('#mp-volume');
       const volFill = el.querySelector('#mp-volume-fill');
+      const volDown = el.querySelector('#mp-vol-down');
+      const volUp = el.querySelector('#mp-vol-up');
       const timeCur = el.querySelector('#mp-time-current');
       const timeTot = el.querySelector('#mp-time-total');
       const nowLabel = el.querySelector('#mp-now-label');
@@ -713,12 +717,19 @@
         audio.currentTime = pct * audio.duration;
       });
 
-      volBar.addEventListener('click', function (e) {
-        const rect = this.getBoundingClientRect();
-        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      function setVolume(v) {
+        var pct = Math.max(0, Math.min(1, v));
         audio.volume = pct;
         volFill.style.width = (pct * 100) + '%';
+      }
+
+      volBar.addEventListener('click', function (e) {
+        const rect = this.getBoundingClientRect();
+        setVolume((e.clientX - rect.left) / rect.width);
       });
+
+      volDown.addEventListener('click', function () { setVolume(audio.volume - 0.1); });
+      volUp.addEventListener('click', function () { setVolume(audio.volume + 0.1); });
 
       if (tracks.length) { loadTrack(0); }
     }
