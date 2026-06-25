@@ -1123,10 +1123,137 @@ html, body {
   color: #8888c0;
 }
 
-/* === Responsive tweaks === */
-@media (max-width: 600px) {
+/* === Responsive — Mobile === */
+@media (max-width: 640px) {
+  /* Desktop icons — 3-column grid */
+  #icon-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+    align-content: flex-start;
+  }
+  .desktop-icon {
+    width: 56px;
+    padding: 4px 2px;
+  }
+  .desktop-icon-img {
+    width: 24px;
+    height: 24px;
+  }
+  .desktop-icon-img img {
+    width: 24px;
+    height: 24px;
+  }
+  .desktop-icon-label {
+    font-size: 9px;
+    max-width: 52px;
+  }
+
+  /* Windows — full width */
+  .window {
+    min-width: 200px;
+    max-width: calc(100vw - 8px);
+    max-height: calc(100vh - 44px);
+  }
+  .window-titlebar {
+    height: 20px;
+    padding: 2px 3px;
+  }
+  .window-titlebar-text {
+    font-size: 10px;
+  }
+  .window-titlebar-buttons button {
+    width: 16px;
+    height: 16px;
+    font-size: 8px;
+  }
+  .window-menubar span {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+  .window-content {
+    padding: 6px;
+    font-size: 10px;
+  }
+  .window-statusbar {
+    font-size: 9px;
+    min-height: 16px;
+    padding: 1px 4px;
+  }
+
+  /* Music player — stack */
+  .mp-container {
+    flex-direction: column;
+  }
+  .mp-playlist {
+    width: 100%;
+    max-height: 120px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-shadow);
+  }
+  .mp-cover {
+    font-size: 32px;
+    width: 44px;
+    height: 44px;
+  }
+  .mp-now-label {
+    font-size: 11px;
+  }
+  .mp-controls {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .mp-volume {
+    width: 40px;
+  }
+  .mp-progress {
+    gap: 3px;
+  }
+  .mp-time {
+    min-width: 26px;
+    font-size: 9px;
+  }
+
+  /* Taskbar */
+  #taskbar {
+    height: 28px;
+    padding: 0 1px;
+  }
+  #start-button {
+    padding: 2px 6px;
+    font-size: 10px;
+    min-width: 44px;
+    height: 22px;
+    gap: 2px;
+  }
+  #taskbar-items {
+    padding: 0 2px;
+    gap: 1px;
+  }
+  .taskbar-item {
+    font-size: 9px;
+    padding: 1px 4px;
+    height: 20px;
+    max-width: 100px;
+    gap: 2px;
+  }
+  .taskbar-item-icon img {
+    width: 12px;
+    height: 12px;
+  }
+  #system-tray {
+    padding: 0 4px;
+    height: 20px;
+  }
+  #clock {
+    font-size: 9px;
+  }
+
+  /* Start menu */
   #start-menu {
-    width: 200px;
+    width: calc(100vw - 4px);
+    max-width: 320px;
   }
   #start-sidebar {
     width: 24px;
@@ -1134,10 +1261,58 @@ html, body {
   #start-sidebar span {
     font-size: 10px;
   }
-  .desktop-icon {
-    width: 64px;
+  .start-item {
+    padding: 4px 8px;
+    font-size: 10px;
+    gap: 4px;
   }
-  .desktop-icon-img {
-    font-size: 28px;
+
+  /* File browser */
+  .file-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 4px;
+    padding: 4px;
   }
+  .file-grid-item .file-icon {
+    font-size: 22px;
+  }
+  .file-grid-item .file-label {
+    font-size: 9px;
+    max-width: 56px;
+  }
+  .file-browser-nav {
+    font-size: 9px;
+  }
+
+  /* Settings */
+  .settings-row label {
+    min-width: 60px;
+    font-size: 10px;
+  }
+  .settings-row select {
+    font-size: 10px;
+  }
+
+  /* Shutdown dialog */
+  .shutdown-dialog {
+    padding: 16px 20px 12px;
+    margin: 0 16px;
+  }
+  .shutdown-dialog p {
+    font-size: 12px;
+  }
+
+  /* Snake canvas */
+  #snake-canvas-container canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Unlock progress bar stays small */
+  .unlock-progress {
+    width: 28px;
+    height: 6px;
+  }
+
+  /* Dark mode overrides stay inherited via vars, no additional changes needed */
 }
