@@ -452,7 +452,7 @@
     toast.innerHTML = '<div class="unlock-toast-icon">' + t.icon + '</div><div class="unlock-toast-body"><div class="unlock-toast-title">Song Unlocked!</div><div class="unlock-toast-name">' + t.file.replace('.mp3', '') + '</div><div class="unlock-toast-album">' + t.album + '</div></div><span class="btn-98 unlock-toast-play" style="padding:2px 8px;font-size:10px;">Play</span>';
     toast.querySelector('.unlock-toast-play').addEventListener('click', function () {
       toast.remove();
-      openApp('music');
+      openWindow('music');
       setTimeout(function () {
         var w = Object.keys(windows).find(function (id) { return windows[id].config && windows[id].config.title === 'Music Player'; });
         if (!w) return;
@@ -461,7 +461,7 @@
         if (filteredIdx === -1) return;
         var row = el.querySelector('.mp-track[data-index="' + filteredIdx + '"]');
         if (row) row.click();
-      }, 100);
+      }, 200);
     });
     document.body.appendChild(toast);
     setTimeout(function () { if (toast.parentNode) toast.remove(); }, 6000);
@@ -710,13 +710,7 @@
         else playWhenReady(audio);
       });
 
-      bar.addEventListener('click', function (e) {
-        e.stopPropagation();
-        if (!audio.duration) return;
-        var pct = (e.clientX - this.getBoundingClientRect().left) / this.offsetWidth;
-        pct = Math.max(0, Math.min(1, pct));
-        audio.currentTime = pct * audio.duration;
-      });
+      // seek-by-click removed — didn't work
 
       function setVolume(v) {
         var pct = Math.max(0, Math.min(1, v));
