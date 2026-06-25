@@ -711,9 +711,10 @@
       });
 
       bar.addEventListener('click', function (e) {
+        e.stopPropagation();
         if (!audio.duration) return;
-        const rect = this.getBoundingClientRect();
-        const pct = (e.clientX - rect.left) / rect.width;
+        var pct = (e.clientX - this.getBoundingClientRect().left) / this.offsetWidth;
+        pct = Math.max(0, Math.min(1, pct));
         audio.currentTime = pct * audio.duration;
       });
 
