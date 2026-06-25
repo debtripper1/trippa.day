@@ -516,27 +516,51 @@
         return m + ':' + (sec < 10 ? '0' : '') + sec;
       }
 
+      var loadingTrack = false;
+
+      function playWhenReady(audioEl) {
+        if (audioEl.readyState >= 2) {
+          audioEl.play();
+          return;
+        }
+        function onCanPlay() {
+          audioEl.removeEventListener('canplay', onCanPlay);
+          audioEl.play();
+        }
+        audioEl.addEventListener('canplay', onCanPlay);
+      }
+
+      function setLoadingState(loading) {
+        loadingTrack = loading;
+        var statusEl = el.querySelector('.window-statusbar');
+        if (!statusEl) return;
+        if (loading) {
+          statusEl.innerHTML = '<span style="flex:1;">Loading... <span class="mp-loading"></span></span><span class="resize-grip">▤</span>';
+        }
+      }
+
       function loadTrack(index) {
         tracks = getFilteredTracks();
         if (index < 0 || index >= tracks.length) return;
         el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('active'); });
-        const row = el.querySelector('.mp-track[data-index="' + index + '"]');
+        var row = el.querySelector('.mp-track[data-index="' + index + '"]');
         if (row) row.classList.add('active');
-        const t = tracks[index];
+        var t = tracks[index];
         currentIndex = index;
-        const filePath = 'assets/music/' + encodeURIComponent(t.album) + '/' + encodeURIComponent(t.file);
+        var filePath = 'assets/music/' + encodeURIComponent(t.album) + '/' + encodeURIComponent(t.file);
         audio.src = filePath;
         audio.load();
         nowLabel.textContent = t.file.replace('.mp3', '');
         nowSub.textContent = t.album;
-        if (isPlaying) { audio.play(); }
+        setLoadingState(true);
       }
 
       function togglePlay() {
         tracks = getFilteredTracks();
         if (!audio.src) { if (tracks.length) loadTrack(0); }
         if (audio.paused) {
-          audio.play();
+          if (audio.readyState >= 2) audio.play();
+          else playWhenReady(audio);
         } else {
           audio.pause();
         }
@@ -545,13 +569,19 @@
       audio.addEventListener('play', function () {
         isPlaying = true;
         playBtn.textContent = '⏸';
-        statusbar.innerHTML = '<span style="flex:1;">Playing — ' + tracks[currentIndex].file.replace('.mp3', '') + '</span><span class="resize-grip">▤</span>';
+        var statusEl = el.querySelector('.window-statusbar');
+        if (statusEl && tracks[currentIndex]) {
+          statusEl.innerHTML = '<span style="flex:1;">Playing — ' + tracks[currentIndex].file.replace('.mp3', '') + '</span><span class="resize-grip">▤</span>';
+        }
       });
 
       audio.addEventListener('pause', function () {
         isPlaying = false;
         playBtn.textContent = '▶';
-        statusbar.innerHTML = '<span style="flex:1;">Paused</span><span class="resize-grip">▤</span>';
+        var statusEl = el.querySelector('.window-statusbar');
+        if (statusEl) {
+          statusEl.innerHTML = '<span style="flex:1;">Paused</span><span class="resize-grip">▤</span>';
+        }
       });
 
       audio.addEventListener('ended', function () {
@@ -562,17 +592,34 @@
 
       audio.addEventListener('timeupdate', function () {
         if (!audio.duration) return;
-        const pct = (audio.currentTime / audio.duration) * 100;
+        var pct = (audio.currentTime / audio.duration) * 100;
         barFill.style.width = pct + '%';
         timeCur.textContent = formatTime(audio.currentTime);
-        const durRow = el.querySelector('#mp-dur-' + currentIndex);
+        var durRow = el.querySelector('#mp-dur-' + currentIndex);
         if (durRow && durRow.textContent === '--:--') durRow.textContent = formatTime(audio.duration);
       });
 
       audio.addEventListener('loadedmetadata', function () {
         timeTot.textContent = formatTime(audio.duration);
-        const durRow = el.querySelector('#mp-dur-' + currentIndex);
+        var durRow = el.querySelector('#mp-dur-' + currentIndex);
         if (durRow) durRow.textContent = formatTime(audio.duration);
+      });
+
+      audio.addEventListener('canplay', function () {
+        if (loadingTrack) {
+          setLoadingState(false);
+          if (isPlaying) audio.play();
+        }
+      });
+
+      audio.addEventListener('waiting', function () { setLoadingState(true); });
+
+      audio.addEventListener('error', function () {
+        setLoadingState(false);
+        var statusEl = el.querySelector('.window-statusbar');
+        if (statusEl) {
+          statusEl.innerHTML = '<span style="flex:1;color:#cc3333;">Error loading track</span><span class="resize-grip">▤</span>';
+        }
       });
 
       playBtn.addEventListener('click', togglePlay);
@@ -590,7 +637,8 @@
         row.addEventListener('dblclick', function () {
           loadTrack(parseInt(this.dataset.index));
           isPlaying = true;
-          audio.play();
+          if (audio.readyState >= 2) audio.play();
+          else playWhenReady(audio);
         });
         row.addEventListener('click', function () {
           el.querySelectorAll('.mp-track').forEach(function (t) { t.classList.remove('selected'); });

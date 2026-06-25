@@ -895,6 +895,23 @@ html, body {
   opacity: 0.6;
 }
 
+/* === Audio loading indicator === */
+.mp-loading::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--border-shadow);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: mp-spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+@keyframes mp-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* === Resize Grip === */
 .resize-grip {
   font-size: 10px;
