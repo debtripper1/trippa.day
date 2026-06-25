@@ -452,16 +452,26 @@
     toast.innerHTML = '<div class="unlock-toast-icon">' + t.icon + '</div><div class="unlock-toast-body"><div class="unlock-toast-title">Song Unlocked!</div><div class="unlock-toast-name">' + t.file.replace('.mp3', '') + '</div><div class="unlock-toast-album">' + t.album + '</div></div><span class="btn-98 unlock-toast-play" style="padding:2px 8px;font-size:10px;">Play</span>';
     toast.querySelector('.unlock-toast-play').addEventListener('click', function () {
       toast.remove();
-      openWindow('music');
-      setTimeout(function () {
-        var w = Object.keys(windows).find(function (id) { return windows[id].config && windows[id].config.title === 'Music Player'; });
-        if (!w) return;
-        var el = windows[w].el;
+      var existingId = Object.keys(windows).find(function (id) { return windows[id].config && windows[id].config.title === 'Music Player'; });
+      if (existingId) {
+        focusWindow(existingId);
+        var el = windows[existingId].el;
         var filteredIdx = getFilteredTracks().indexOf(trackDB[idx]);
         if (filteredIdx === -1) return;
         var row = el.querySelector('.mp-track[data-index="' + filteredIdx + '"]');
         if (row) row.click();
-      }, 200);
+      } else {
+        openWindow('music');
+        setTimeout(function () {
+          var w = Object.keys(windows).find(function (id) { return windows[id].config && windows[id].config.title === 'Music Player'; });
+          if (!w) return;
+          var el = windows[w].el;
+          var filteredIdx = getFilteredTracks().indexOf(trackDB[idx]);
+          if (filteredIdx === -1) return;
+          var row = el.querySelector('.mp-track[data-index="' + filteredIdx + '"]');
+          if (row) row.click();
+        }, 200);
+      }
     });
     document.body.appendChild(toast);
     setTimeout(function () { if (toast.parentNode) toast.remove(); }, 6000);
