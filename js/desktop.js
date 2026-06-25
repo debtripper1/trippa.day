@@ -7,7 +7,8 @@
   let selectedIcon = null;
   let startMenuOpen = false;
   let shutdownOverlay = null;
-  let darkMode = false;
+  let darkMode = (function () { try { return localStorage.getItem('trippa-dark') === 'true'; } catch (e) { return false; } })();
+  if (darkMode) document.documentElement.classList.add('dark-mode');
   let unlocked = new Set();
 
   const DESKTOP = document.getElementById('desktop');
@@ -49,6 +50,29 @@
     selectedIcon = icon;
   });
 
+  /* Keyboard nav for desktop icons */
+  ICON_GRID.addEventListener('keydown', function (e) {
+    var icon = e.target.closest('.desktop-icon');
+    if (!icon) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      var app = icon.dataset.app;
+      if (app) openWindow(app);
+      return;
+    }
+    var icons = Array.from(ICON_GRID.querySelectorAll('.desktop-icon'));
+    var idx = icons.indexOf(icon);
+    if (e.key === 'ArrowRight') { e.preventDefault(); idx = (idx + 1) % icons.length; }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); idx = (idx - 1 + icons.length) % icons.length; }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); idx = Math.min(idx + 3, icons.length - 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); idx = Math.max(idx - 3, 0); }
+    else return;
+    icons[idx].focus();
+    if (selectedIcon) selectedIcon.classList.remove('selected');
+    icons[idx].classList.add('selected');
+    selectedIcon = icons[idx];
+  });
+
   /* Deselect on background click */
   DESKTOP.addEventListener('mousedown', function (e) {
     if (e.target === DESKTOP || e.target === ICON_GRID || e.target.id === 'window-manager') {
@@ -69,8 +93,12 @@
     win.dataset.windowId = id;
     win.style.width = config.width + 'px';
     win.style.height = config.height + 'px';
-    win.style.left = (40 + (windowCounter % 5) * 30) + 'px';
-    win.style.top = (40 + (windowCounter % 5) * 25) + 'px';
+    var left = 40 + (windowCounter % 5) * 30;
+    var top = 40 + (windowCounter % 5) * 25;
+    if (left + config.width > window.innerWidth) left = Math.max(0, window.innerWidth - config.width - 10);
+    if (top + config.height > window.innerHeight - 36) top = Math.max(0, window.innerHeight - 36 - config.height - 10);
+    win.style.left = left + 'px';
+    win.style.top = top + 'px';
     win.style.zIndex = ++zIndexCounter;
 
     win.innerHTML = buildWindowHTML(config, id);
@@ -1326,6 +1354,7 @@
   function toggleDarkMode() {
     darkMode = !darkMode;
     document.body.classList.toggle('dark-mode', darkMode);
+    try { localStorage.setItem('trippa-dark', darkMode); } catch (e) {}
   }
 
   /* ========== SECRET UNLOCK TRIGGERS ========== */
