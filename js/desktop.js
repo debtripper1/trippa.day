@@ -202,6 +202,8 @@
     }
   };
 
+  function esc(str) { return String(str).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+
   function renderDir(dirName) {
     const dir = virtualFS[dirName];
     if (!dir) return '<div class="file-grid-item" style="color:var(--text-disabled);">(empty)</div>';
@@ -209,7 +211,7 @@
     let html = '';
     names.forEach(name => {
       const entry = dir[name];
-      html += `<div class="file-grid-item" data-type="${entry.type}" data-name="${name}" data-app="${entry.app || ''}"><span class="file-icon">${entry.icon || '📄'}</span><span class="file-label">${name}</span></div>`;
+      html += '<div class="file-grid-item" data-type="' + esc(entry.type) + '" data-name="' + esc(name) + '" data-app="' + esc(entry.app || '') + '"><span class="file-icon">' + (entry.icon || '📄') + '</span><span class="file-label">' + esc(name) + '</span></div>';
     });
     return html;
   }
@@ -522,7 +524,7 @@
         if (row) row.classList.add('active');
         const t = tracks[index];
         currentIndex = index;
-        const filePath = 'assets/music/' + t.album + '/' + encodeURIComponent(t.file);
+        const filePath = 'assets/music/' + encodeURIComponent(t.album) + '/' + encodeURIComponent(t.file);
         audio.src = filePath;
         audio.load();
         nowLabel.textContent = t.file.replace('.mp3', '');
@@ -1028,14 +1030,23 @@
   /* ========== WINDOW EVENTS ========== */
   function bindWindowEvents(win, id) {
     const titlebar = win.querySelector('.window-titlebar');
-    const content = win.querySelector('.window-content');
-    const config = windows[id].config;
 
     /* Focus */
     win.addEventListener('mousedown', function () { focusWindow(id); });
 
     /* Drag */
     let dragging = false, dragOffX, dragOffY;
+    function onMouseMove(e) {
+      if (!dragging) return;
+      const newX = e.clientX - dragOffX;
+      const newY = e.clientY - dragOffY;
+      const maxX = window.innerWidth - 40;
+      const maxY = window.innerHeight - 40;
+      win.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
+      win.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
+    }
+    function onMouseUp() { dragging = false; }
+
     titlebar.addEventListener('mousedown', function (e) {
       if (e.target.closest('.window-titlebar-buttons')) return;
       if (windows[id].maximized) return;
@@ -1050,17 +1061,9 @@
       focusWindow(id);
     });
 
-    document.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      const newX = e.clientX - dragOffX;
-      const newY = e.clientY - dragOffY;
-      const maxX = window.innerWidth - 40;
-      const maxY = window.innerHeight - 40;
-      win.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
-      win.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
-    });
-
-    document.addEventListener('mouseup', function () { dragging = false; });
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+    windows[id].dragHandlers = { mousemove: onMouseMove, mouseup: onMouseUp };
 
     /* Minimize */
     win.querySelector('.btn-minimize').addEventListener('click', function () { minimizeWindow(id); });
@@ -1126,6 +1129,11 @@
   function closeWindow(id) {
     const w = windows[id];
     if (!w) return;
+    if (w.dragHandlers) {
+      document.removeEventListener('mousemove', w.dragHandlers.mousemove);
+      document.removeEventListener('mouseup', w.dragHandlers.mouseup);
+    }
+    if (w.cleanup) w.cleanup();
     w.el.remove();
     delete windows[id];
     const tb = document.querySelector(`.taskbar-item[data-win="${id}"]`);
