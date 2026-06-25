@@ -420,7 +420,22 @@ html, body {
   cursor: pointer;
   min-width: 60px;
   height: 28px;
-  outline: none; /* breadcrumb: rm if outline issue returns */
+  outline: none;
+}
+
+#start-button:focus,
+#start-button:focus-visible {
+  outline: none;
+}
+
+#start-button:focus::-moz-focus-inner {
+  border: 0;
+}
+
+#start-button *,
+#start-button *::before,
+#start-button *::after {
+  outline: none;
 }
 
 #start-button:hover {
@@ -1088,6 +1103,9 @@ html, body {
 .window-resize-handle {
   position: absolute;
   z-index: 20;
+  background: transparent;
+  border: none;
+  pointer-events: auto;
 }
 .window-resize-handle-n  { top: -4px; left: 6px; right: 6px; height: 8px; cursor: n-resize; }
 .window-resize-handle-s  { bottom: -4px; left: 6px; right: 6px; height: 8px; cursor: s-resize; }
