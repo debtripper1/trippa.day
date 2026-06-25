@@ -462,7 +462,7 @@
         if (currentAlbum) albumHtml += '</div>';
         const listEl = contentEl.querySelector('.mp-playlist');
         if (listEl) listEl.innerHTML = albumHtml;
-        w.el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;">' + tracks.length + ' tracks unlocked</span><span class="resize-grip">▤</span>';
+        w.el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;">' + tracks.length + ' / ' + trackDB.length + ' tracks unlocked <span class="unlock-progress"><span class="unlock-progress-fill" style="width:' + Math.round((tracks.length / trackDB.length) * 100) + '%;"></span></span></span><span class="resize-grip">▤</span>';
       }
     });
   }
@@ -833,12 +833,13 @@
       menubar.innerHTML = '<span id="np-new">File</span><span id="np-undo">Edit</span><span id="np-wrap">Format</span><span id="np-about">Help</span>';
 
       el.querySelector('#np-new').addEventListener('click', function () {
-        if (textarea.value && confirm('Save changes?')) {
-          const blob = new Blob([textarea.value], { type: 'text/plain' });
-          const a = document.createElement('a');
+        if (textarea.value) {
+          var blob = new Blob([textarea.value], { type: 'text/plain' });
+          var a = document.createElement('a');
           a.href = URL.createObjectURL(blob);
           a.download = 'untitled.txt';
           a.click();
+          URL.revokeObjectURL(a.href);
         }
         textarea.value = '';
         statusbar.innerHTML = '<span style="flex:1;">Untitled</span><span class="resize-grip">▤</span>';
@@ -1162,7 +1163,33 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-    windows[id].dragHandlers = { mousemove: onMouseMove, mouseup: onMouseUp };
+
+    /* Resize grip */
+    var grip = win.querySelector('.resize-grip');
+    var resizing = false, resizeStartX, resizeStartY, resizeStartW, resizeStartH;
+    function onResizeMove(e) {
+      if (!resizing) return;
+      var newW = Math.max(200, resizeStartW + (e.clientX - resizeStartX));
+      var newH = Math.max(100, resizeStartH + (e.clientY - resizeStartY));
+      win.style.width = newW + 'px';
+      win.style.height = newH + 'px';
+    }
+    function onResizeUp() { resizing = false; }
+    if (grip) {
+      grip.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        var rect = win.getBoundingClientRect();
+        resizing = true;
+        resizeStartX = e.clientX;
+        resizeStartY = e.clientY;
+        resizeStartW = rect.width;
+        resizeStartH = rect.height;
+        document.addEventListener('mousemove', onResizeMove);
+        document.addEventListener('mouseup', onResizeUp);
+      });
+    }
+
+    windows[id].dragHandlers = { mousemove: onMouseMove, mouseup: onMouseUp, resizeMove: onResizeMove, resizeUp: onResizeUp };
 
     /* Minimize */
     win.querySelector('.btn-minimize').addEventListener('click', function () { minimizeWindow(id); });
@@ -1231,6 +1258,8 @@
     if (w.dragHandlers) {
       document.removeEventListener('mousemove', w.dragHandlers.mousemove);
       document.removeEventListener('mouseup', w.dragHandlers.mouseup);
+      document.removeEventListener('mousemove', w.dragHandlers.resizeMove);
+      document.removeEventListener('mouseup', w.dragHandlers.resizeUp);
     }
     if (w.cleanup) w.cleanup();
     w.el.remove();
@@ -1359,6 +1388,17 @@
 
   /* ========== SECRET UNLOCK TRIGGERS ========== */
   document.addEventListener('click', function (e) { tryUnlock(e); });
+
+  /* ========== BROWSER RESIZE — reflow maximized windows ========== */
+  window.addEventListener('resize', function () {
+    Object.keys(windows).forEach(function (id) {
+      var w = windows[id];
+      if (w && w.maximized) {
+        w.el.style.width = window.innerWidth + 'px';
+        w.el.style.height = (window.innerHeight - 36) + 'px';
+      }
+    });
+  });
 
   /* ========== KEYBOARD SHORTCUTS ========== */
   document.addEventListener('keydown', function (e) {

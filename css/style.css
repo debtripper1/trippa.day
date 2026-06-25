@@ -895,6 +895,22 @@ html, body {
   opacity: 0.6;
 }
 
+/* === Secret unlock progress bar === */
+.unlock-progress {
+  display: inline-block;
+  width: 40px;
+  height: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-shadow);
+  vertical-align: middle;
+  margin-left: 6px;
+}
+.unlock-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  opacity: 0.7;
+}
+
 /* === Audio loading indicator === */
 .mp-loading::after {
   content: '';
