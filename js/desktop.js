@@ -8,7 +8,7 @@
   let startMenuOpen = false;
   let shutdownOverlay = null;
   let darkMode = (function () { try { return localStorage.getItem('trippa-dark') === 'true'; } catch (e) { return false; } })();
-  if (darkMode) document.documentElement.classList.add('dark-mode');
+  if (darkMode) document.body.classList.add('dark-mode');
   let unlocked = new Set();
 
   const DESKTOP = document.getElementById('desktop');
@@ -86,6 +86,16 @@
     closeStartMenu();
     const config = getAppConfig(appType);
     if (!config) return;
+
+    var existingId = Object.keys(windows).find(function (id) { return windows[id].config && windows[id].config.title === config.title; });
+    if (existingId) {
+      if (windows[existingId].minimized) {
+        windows[existingId].minimized = false;
+        windows[existingId].el.style.display = '';
+      }
+      focusWindow(existingId);
+      return;
+    }
 
     const id = 'win-' + (++windowCounter);
     const win = document.createElement('div');
