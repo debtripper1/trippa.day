@@ -854,7 +854,7 @@ html, body {
   height: 12px;
   background: var(--bg-input);
   border: 1px solid var(--border-shadow);
-  cursor: pointer;
+  cursor: default;
   position: relative;
 }
 

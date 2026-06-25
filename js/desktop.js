@@ -561,7 +561,7 @@
               <span style="flex:1;"></span>
               <span style="font-size:10px;color:var(--text-disabled);align-self:center;">Vol</span>
               <span class="btn-98 mp-btn mp-vol-arrow" id="mp-vol-down" style="padding:1px 6px;font-size:9px;">◀</span>
-              <div class="mp-volume" id="mp-volume"><div class="mp-volume-fill" id="mp-volume-fill" style="width:70%"></div></div>
+              <div class="mp-volume" id="mp-volume"><div class="mp-volume-fill" id="mp-volume-fill" style="width:100%"></div></div>
               <span class="btn-98 mp-btn mp-vol-arrow" id="mp-vol-up" style="padding:1px 6px;font-size:9px;">▶</span>
             </div>
             <audio id="mp-audio" style="display:none;"></audio>
@@ -590,6 +590,7 @@
       let currentIndex = -1;
       let isPlaying = false;
       let tracks = getFilteredTracks();
+      audio.volume = 1.0;
 
       function formatTime(s) {
         if (isNaN(s)) return '0:00';
