@@ -117,11 +117,18 @@
     const contentEl = win.querySelector('.window-content');
     if (config.content) contentEl.innerHTML = config.content;
 
-    windows[id] = { el: win, config: config, minimized: false, maximized: false, prevRect: null, currentPath: null };
+    windows[id] = { el: win, config: config, minimized: false, maximized: false, prevRect: null, currentPath: null, resizeObserver: null };
 
     bindWindowEvents(win, id);
     addTaskbarItem(id, config);
     focusWindow(id);
+
+    /* Observe content area resizes for responsive layout */
+    var ro = new ResizeObserver(function () {
+      triggerContentResize(id);
+    });
+    ro.observe(contentEl);
+    windows[id].resizeObserver = ro;
     if (config.miniAppInit) {
       setTimeout(function () { config.miniAppInit(id); }, 50);
     }
@@ -1238,29 +1245,65 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
 
-    /* Resize grip */
-    var grip = win.querySelector('.resize-grip');
-    var resizing = false, resizeStartX, resizeStartY, resizeStartW, resizeStartH;
-    function onResizeMove(e) {
-      if (!resizing) return;
-      var newW = Math.max(200, resizeStartW + (e.clientX - resizeStartX));
-      var newH = Math.max(100, resizeStartH + (e.clientY - resizeStartY));
-      win.style.width = newW + 'px';
-      win.style.height = newH + 'px';
-    }
-    function onResizeUp() { resizing = false; }
-    if (grip) {
-      grip.addEventListener('mousedown', function (e) {
+    /* Edge / corner resize */
+    var dirs = ['n','s','e','w','nw','ne','sw','se'];
+    var resizing = null, resizeStart = {};
+    var MIN_W = 220, MIN_H = 140;
+
+    function createHandle(dir) {
+      var h = document.createElement('div');
+      h.className = 'window-resize-handle window-resize-handle-' + dir;
+      win.appendChild(h);
+      h.addEventListener('mousedown', function (e) {
         e.preventDefault();
+        e.stopPropagation();
+        focusWindow(id);
+        if (windows[id].maximized) return;
         var rect = win.getBoundingClientRect();
-        resizing = true;
-        resizeStartX = e.clientX;
-        resizeStartY = e.clientY;
-        resizeStartW = rect.width;
-        resizeStartH = rect.height;
+        resizing = dir;
+        resizeStart = {
+          x: e.clientX, y: e.clientY,
+          left: rect.left, top: rect.top,
+          width: rect.width, height: rect.height
+        };
+        win.style.left = rect.left + 'px';
+        win.style.top = rect.top + 'px';
+        win.style.width = rect.width + 'px';
+        win.style.height = rect.height + 'px';
         document.addEventListener('mousemove', onResizeMove);
         document.addEventListener('mouseup', onResizeUp);
       });
+    }
+    dirs.forEach(createHandle);
+
+    function onResizeMove(e) {
+      if (!resizing) return;
+      var dx = e.clientX - resizeStart.x;
+      var dy = e.clientY - resizeStart.y;
+      var s = resizing, r = resizeStart;
+      var newL = r.left, newT = r.top, newW = r.width, newH = r.height;
+
+      if (s.indexOf('e') >= 0) newW = Math.max(MIN_W, r.width + dx);
+      if (s.indexOf('w') >= 0) {
+        newW = Math.max(MIN_W, r.width - dx);
+        newL = r.left + r.width - newW;
+      }
+      if (s.indexOf('s') >= 0) newH = Math.max(MIN_H, r.height + dy);
+      if (s.indexOf('n') >= 0) {
+        newH = Math.max(MIN_H, r.height - dy);
+        newT = r.top + r.height - newH;
+      }
+
+      win.style.left = newL + 'px';
+      win.style.top = newT + 'px';
+      win.style.width = newW + 'px';
+      win.style.height = newH + 'px';
+    }
+    function onResizeUp() {
+      resizing = null;
+      document.removeEventListener('mousemove', onResizeMove);
+      document.removeEventListener('mouseup', onResizeUp);
+      triggerContentResize(id);
     }
 
     windows[id].dragHandlers = { mousemove: onMouseMove, mouseup: onMouseUp, resizeMove: onResizeMove, resizeUp: onResizeUp };
@@ -1324,6 +1367,31 @@
       el.querySelector('.btn-maximize').textContent = '□';
     }
     el.style.zIndex = ++zIndexCounter;
+    triggerContentResize(id);
+  }
+
+  function triggerContentResize(id) {
+    var w = windows[id];
+    if (!w) return;
+    var content = w.el.querySelector('.window-content');
+    if (!content) return;
+    var cw = content.clientWidth;
+
+    /* Music player — narrow playlist / stack when cramped */
+    var container = w.el.querySelector('.mp-container');
+    if (container) {
+      container.classList.toggle('mp-stack', cw < 280);
+    }
+    var pl = w.el.querySelector('.mp-playlist');
+    if (pl) {
+      pl.classList.toggle('mp-playlist-narrow', cw < 420);
+    }
+
+    /* Narrow content padding */
+    content.classList.toggle('win-content-narrow', cw < 350);
+
+    /* Fire a custom event so apps can react */
+    content.dispatchEvent(new CustomEvent('winresize'));
   }
 
   function closeWindow(id) {
@@ -1335,6 +1403,7 @@
       document.removeEventListener('mousemove', w.dragHandlers.resizeMove);
       document.removeEventListener('mouseup', w.dragHandlers.resizeUp);
     }
+    if (w.resizeObserver) w.resizeObserver.disconnect();
     if (w.cleanup) w.cleanup();
     w.el.remove();
     delete windows[id];
