@@ -24,7 +24,7 @@
     CLOCK.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
   updateClock();
-  setInterval(updateClock, 30000);
+  setInterval(updateClock, 1000);
 
   /* ========== DESKTOP ICONS ========== */
   ICON_GRID.addEventListener('click', function (e) {
@@ -776,6 +776,10 @@
       canvas.setAttribute('tabindex', '0');
       canvas.focus();
       startGame();
+
+      windows[winId].cleanup = function () {
+        if (gameLoop) { clearInterval(gameLoop); gameLoop = null; }
+      };
     }
   };
 
@@ -846,11 +850,30 @@
       const canvas = el.querySelector('#paint-canvas');
       if (!canvas) return;
       const container = canvas.parentElement;
+      function resizeCanvas() {
+        var w = container.clientWidth - 2;
+        var h = container.clientHeight - 2;
+        if (w <= 0 || h <= 0) return;
+        var imgData = null;
+        try { imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); } catch (e) {}
+        canvas.width = w;
+        canvas.height = h;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+        if (imgData) ctx.putImageData(imgData, 0, 0);
+      }
       canvas.width = container.clientWidth - 2;
       canvas.height = container.clientHeight - 2;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      var ro = new ResizeObserver(function () { resizeCanvas(); });
+      ro.observe(container);
+      var prevCleanup = windows[winId].cleanup;
+      windows[winId].cleanup = function () {
+        if (prevCleanup) prevCleanup();
+        ro.disconnect();
+      };
 
       let drawing = false;
       let color = '#000000';

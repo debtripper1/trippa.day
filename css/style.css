@@ -960,7 +960,7 @@ html, body {
   to { opacity: 1; }
 }
 
-/* === DARK MODE OVERRIDES (Ctrl+Shift+D) === */
+/* === DARK MODE OVERRIDES (Recycle Bin toggle) === */
 .dark-mode {
   --bg-desktop: #0a0a0f;
   --bg-window: #1a1a24;
