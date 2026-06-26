@@ -33,18 +33,24 @@
 <font face="Arial" size="2" color="#000000"><b>Page Not Found</b></font><br>
 <font face="Arial" size="2" color="#333333">
 The page you are looking for does not exist.<br><br>
-It may have been moved, deleted, or perhaps it never existed at all.<br><br>
 <a href="index.html">Return to the main page</a>
 </font><br><br>
 <font face="Arial" size="1" color="#666666">
-Error 404 &mdash; File not found<br>
-good hope &copy; 2026
+Error 404<span id="ia" style="cursor:pointer;color:#444;">: I need answers<span style="color:#888;text-decoration:underline;">!</span></span><br>
+good hope &copy; 1997
 </font>
 </td></tr></table>
 </td></tr>
 <tr><td align="center" style="padding:4px 0 10px 0;">
 <button onclick="location.href='index.html'" style="background:#c0c0c0;border:2px outset #fff;font-family:Arial;font-size:11px;padding:2px 20px;cursor:pointer;">OK</button>
 </td></tr>
+
+<script>
+document.getElementById('ia').addEventListener('click', function () {
+  try { parent.postMessage('unlock:grieving', '*'); } catch (e) {}
+  this.innerHTML = ': I need answers<span style="color:#4caf50;">!</span>';
+});
+</script>
 </table>
 
 </center>
