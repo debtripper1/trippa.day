@@ -329,6 +329,21 @@
     openWindow('notepad', { fileName: fileName, content: content });
   }
 
+  var unlockNotes = [
+    { file: 'SAYING GOODBYE.txt', content: 'SAYING GOODBYE\nAlbum: GOOD HOPE\n\n(no lyrics available)' },
+    { file: 'FOX AND THE HOUND.txt', content: 'FOX AND THE HOUND\nAlbum: GOOD HOPE\n\nI\'m drawin\' down my bead on you\nBut you zig-zag too damned quick\nLost your scent, but caught your tracks\nAs you cross the creek\n\nNearly got a hold of you\nBut your fur was too damned slick\nTracks are melting into the mud\nFog\'s rollin\' in quick\n\nI rifle through the river reeds\nTryin\' to track you down\nTryin\' to get a hold of you\nBut you don\'t make a sound\n\nI\'d holler but I\'d spook you\nI wanna call you out\nI want my oldest friend back in my arms\nWe\'re like the fox and the hound\n\nIf I had to lose you\nI\'d sooner lose myself\nIf you had to go away\nLose your hair and health\n\nIf I had to watch you die\nI\'d rather kill myself\nIf you left as soft as lullabies\nI think that it might help\n\nIf I saw you suffering\nI\'d do all I can to help\nIf one of us gets left behind\nI just don\'t want to dwell\n\nIf I saw your fading smile\nTowards the bitter end\nI would rather lose my mind\nThan lose my oldest friend\n\nWhen we were younger\nAll the lights got brighter\nOur brotherhood was skyward bound\nNow I\'m mature I see a ticking timebomb\nWe\'re like the fox and the hound\n\nYou always run away\nKeep everyone at bay\nI wanna keep you safe\nYou wanna run away.' },
+    { file: 'DADDY LONG LEGS.txt', content: 'DADDY LONG LEGS\nAlbum: GOOD HOPE\n\ni spin around all circular,\ni turn around, you\'re taller,\nyour chest got triangular,\nyour jaw got straight, and angular.\n\nwhat lessons could i heed,\nfull to brim, with a want for a need,\nwhere you stand, i once stood,\nif youth knew, if age could.\n\na daddy long legs keeps spinning web,\non my passenger mirror,\ni named him after my grandaddy, fred,\ni hope he makes it through the winter,\nthe spider, that is, my grandfather\'s gone,\nhe died ten years before i was born.\n\ni never got to meet the man,\nwho made my dad my dad,\nonly the stories he\'s told,\nhis jet black hair slicked back.\n\ni never got to meet my nan,\nto hear the life she had,\nshe died when dad was 9 years old,\ni hear him call her back.\n\ncountless, the things i\'ve done and said,\nwith innocent intentions,\nthey\'re still there now, just percolating,\nunderneath the caldera,\n\nin spite of the years,\nthat pass in the wind,\ni never knew where i was going,\ni never cared where i\'d been.' }
+  ];
+
+  function addUnlockNote(idx) {
+    var note = unlockNotes[idx - 16];
+    if (!note) return;
+    if (virtualFS['Documents'] && virtualFS['Documents'][note.file]) return;
+    if (virtualFS['Documents']) {
+      virtualFS['Documents'][note.file] = { type: 'file', icon: '📄', size: '1 KB', content: note.content };
+    }
+  }
+
   function addRecentTextFile(fileName) {
     recentTextFiles = recentTextFiles.filter(function (f) { return f !== fileName; });
     recentTextFiles.unshift(fileName);
@@ -880,6 +895,7 @@
             unlocked.add(17);
             refreshMusicPlayer();
             showUnlockToast(17);
+            addUnlockNote(17);
           }
           placeFood();
         } else {
@@ -1492,6 +1508,7 @@
             unlocked.add(18);
             refreshMusicPlayer();
             showUnlockToast(18);
+            addUnlockNote(18);
           }
           setTimeout(() => { el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;color:#4caf50;">You Win! 🎉</span><span class="resize-grip">▤</span>'; }, 100);
         }
@@ -1902,6 +1919,7 @@
       unlocked.add(16);
       refreshMusicPlayer();
       showUnlockToast(16);
+      addUnlockNote(16);
     }
   });
 
