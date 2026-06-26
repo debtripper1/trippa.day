@@ -1865,6 +1865,23 @@
     });
   });
 
+  /* Submenu overflow prevention */
+  document.querySelectorAll('.start-submenu-item').forEach(function (item) {
+    item.addEventListener('mouseenter', function () {
+      var sub = this.querySelector('.start-submenu');
+      if (!sub) return;
+      sub.style.top = '';
+      requestAnimationFrame(function () {
+        var subRect = sub.getBoundingClientRect();
+        if (subRect.bottom > window.innerHeight) {
+          var parentRect = item.getBoundingClientRect();
+          var overflow = subRect.bottom - window.innerHeight;
+          sub.style.top = (parseFloat(sub.style.top) || -4) - overflow + 'px';
+        }
+      });
+    });
+  });
+
   /* Shutdown */
   document.getElementById('start-shutdown').addEventListener('click', function () {
     closeStartMenu();

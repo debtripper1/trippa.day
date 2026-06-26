@@ -538,7 +538,7 @@ html, body {
   position: fixed;
   bottom: 36px;
   left: 0;
-  width: 260px;
+  width: 280px;
   background: var(--bg-start-menu);
   border: 2px solid var(--border-shadow);
   border-top-color: var(--border-highlight);
