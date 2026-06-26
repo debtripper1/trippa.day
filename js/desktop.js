@@ -82,7 +82,7 @@
   });
 
   /* ========== WINDOW SYSTEM ========== */
-  function openWindow(appType) {
+  function openWindow(appType, extraData) {
     closeStartMenu();
     const config = getAppConfig(appType);
     if (!config) return;
@@ -92,6 +92,9 @@
       if (windows[existingId].minimized) {
         windows[existingId].minimized = false;
         windows[existingId].el.style.display = '';
+      }
+      if (extraData && appType === 'notepad') {
+        loadNotepadFile(existingId, extraData);
       }
       focusWindow(existingId);
       return;
@@ -117,7 +120,7 @@
     const contentEl = win.querySelector('.window-content');
     if (config.content) contentEl.innerHTML = config.content;
 
-    windows[id] = { el: win, config: config, minimized: false, maximized: false, prevRect: null, currentPath: null, resizeObserver: null };
+    windows[id] = { el: win, config: config, minimized: false, maximized: false, prevRect: null, currentPath: null, resizeObserver: null, extraData: extraData || null };
 
     bindWindowEvents(win, id);
     addTaskbarItem(id, config);
@@ -233,8 +236,8 @@
   const virtualFS = {
     'root': { 'Music': { type: 'folder', icon: '📁' }, 'Documents': { type: 'folder', icon: '📁' }, 'Downloads': { type: 'folder', icon: '📁' }, 'Apps': { type: 'folder', icon: '📁' }, 'Projects': { type: 'folder', icon: '📁' }, 'Desktop': { type: 'folder', icon: '📁' } },
     'Music': { 'track1.mp3': { type: 'file', icon: '🎵', size: '5.2 MB' }, 'track2.mp3': { type: 'file', icon: '🎵', size: '4.8 MB' }, 'album-cover.jpg': { type: 'file', icon: '🖼️', size: '124 KB' } },
-    'Documents': { 'notes.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'readme.md': { type: 'file', icon: '📄', size: '8 KB' }, 'budget.xlsx': { type: 'file', icon: '📊', size: '64 KB' }, 'hunt.txt': { type: 'file', icon: '🎯', size: '1 KB' } },
-    'Downloads': { 'trippa-theme-v1.zip': { type: 'file', icon: '📄', size: '2.4 MB' }, 'wallpaper-dark.png': { type: 'file', icon: '🖼️', size: '856 KB' }, 'music-setup.msi': { type: 'file', icon: '💿', size: '14.2 MB' }, 'readme.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'spider.txt': { type: 'file', icon: '🕷️', size: '1 KB' } },
+    'Documents': { 'notes.txt': { type: 'file', icon: '📄', size: '2 KB', content: 'Shopping list:\n- milk\n- eggs\n- bread\n- new strings for the acoustic\n- maybe some sleep if i can find it' }, 'readme.md': { type: 'file', icon: '📄', size: '8 KB' }, 'budget.xlsx': { type: 'file', icon: '📊', size: '64 KB' }, 'hunt.txt': { type: 'file', icon: '🎯', size: '1 KB', content: 'the hound runs.\nthe fox pursues.\none tracks, the other escapes.\n\nhow many points until the hunt ends?' } },
+    'Downloads': { 'trippa-theme-v1.zip': { type: 'file', icon: '📄', size: '2.4 MB' }, 'wallpaper-dark.png': { type: 'file', icon: '🖼️', size: '856 KB' }, 'music-setup.msi': { type: 'file', icon: '💿', size: '14.2 MB' }, 'readme.txt': { type: 'file', icon: '📄', size: '2 KB', content: 'This is the trippa.day project.\nFor questions, contact: goodhope@nowhere.com' }, 'spider.txt': { type: 'file', icon: '🕷️', size: '1 KB', content: '           ;               ,           \n         ,;                 \'.\n        ;:                   :;\n       ::                     ::\n       ::                     ::\n       \':                     :\n        :.                    :\n     ;\' ::                   ::  \'\n    .\'  \';                   ;\'  \'.\n   ::    :;                 ;:    ::\n   ;      :;.             ,;:     ::\n   :;      :;:           ,;"      ::\n   ::.      \';:  ..,.;  ;:\'     ,.;:\n    "\'"...   \'::,::::: ;:   .;.;""\'\n        \'"""....;:::::;,;.;"""\n    .:::.....\'""\':::::::\'",...;::::;.\n   ;:\' \'""\'"";.,;:::::;.\'""""""  \':;\n  ::\'         ;::;:::;::..         :;\n ::         ,;:::::::::::;:..       ::\n ;\'     ,;;:;::::::::::::::;";..    \':.\n::     ;:"  ::::::"""\'::::::  ":     :\n :.    ::   ::::::;  :::::::   :     ;\n  ;    ::   :::::::  :::::::   :    ;\n   \'   ::   ::::::....:::::\'  ,:   \'\n    \'  ::    :::::::::::::"   ::\n       ::     \':::::::::"\'    ::\n       \':       """""""\'      ::\n        ::                   ;:\n        \':;                 ;:"\n          \';              ,;\'\n            "\'           \'"\n              \'\n\neight legs weaving.\neight legs creeping.\na web of danger hidden deep.\n\nhow many safe squares before you find what\'s buried?' } },
     'Apps': { 'Snake': { type: 'app', icon: '<img src=\"assets/icons/program_manager.png\" width=\"28\" height=\"28\">', app: 'snake' }, 'Notepad': { type: 'app', icon: '<img src=\"assets/icons/notepad.png\" width=\"28\" height=\"28\">', app: 'notepad' }, 'Paint': { type: 'app', icon: '<img src=\"assets/icons/paint.png\" width=\"28\" height=\"28\">', app: 'paint' }, 'Calculator': { type: 'app', icon: '<img src=\"assets/icons/computer.png\" width=\"28\" height=\"28\">', app: 'calc' }, 'Music Player': { type: 'app', icon: '<img src=\"assets/icons/sound.png\" width=\"28\" height=\"28\">', app: 'music' } },
     'Projects': { 'index.html': { type: 'file', icon: '📄', size: '3 KB' }, 'style.css': { type: 'file', icon: '📄', size: '12 KB' }, 'desktop.js': { type: 'file', icon: '📄', size: '18 KB' }, 'build.bat': { type: 'file', icon: '⚙️', size: '1 KB' } },
     'Desktop': {
@@ -295,6 +298,12 @@
         if (app) openWindow(app);
       });
     });
+    el.querySelectorAll('.file-grid-item[data-type="file"]').forEach(item => {
+      item.addEventListener('dblclick', function () {
+        var name = this.dataset.name;
+        if (/\.txt$/i.test(name)) openTextFile(name);
+      });
+    });
 
     const upBtn = el.querySelector('.nav-up');
     if (upBtn) {
@@ -302,6 +311,28 @@
         navigateTo(winId, this.dataset.path);
       });
     }
+  }
+
+  var recentTextFiles = [];
+
+  function openTextFile(fileName) {
+    var content = null;
+    Object.keys(virtualFS).forEach(function (dir) {
+      Object.keys(virtualFS[dir]).forEach(function (name) {
+        if (name === fileName && virtualFS[dir][name].content !== undefined) {
+          content = virtualFS[dir][name].content;
+        }
+      });
+    });
+    if (content === null) content = '(empty)';
+    addRecentTextFile(fileName);
+    openWindow('notepad', { fileName: fileName, content: content });
+  }
+
+  function addRecentTextFile(fileName) {
+    recentTextFiles = recentTextFiles.filter(function (f) { return f !== fileName; });
+    recentTextFiles.unshift(fileName);
+    if (recentTextFiles.length > 10) recentTextFiles.length = 10;
   }
 
   function bindRecycleToggle(winId) {
@@ -900,6 +931,23 @@
     }
   };
 
+  function loadNotepadFile(winId, data) {
+    var w = windows[winId];
+    if (!w) return;
+    var el = w.el;
+    var textarea = el.querySelector('#notepad-text');
+    if (!textarea) return;
+    var statusbar = el.querySelector('.window-statusbar');
+    textarea.value = data.content || '';
+    w.currentFile = data.fileName || null;
+    if (w.currentFile) {
+      addRecentTextFile(w.currentFile);
+      statusbar.innerHTML = '<span style="flex:1;">' + w.currentFile + '</span><span class="resize-grip">▤</span>';
+    } else {
+      statusbar.innerHTML = '<span style="flex:1;">Untitled</span><span class="resize-grip">▤</span>';
+    }
+  }
+
   miniApps.notepad = {
     title: 'Notepad',
     icon: '<img src="assets/icons/notepad.png" width="16" height="16">',
@@ -912,16 +960,41 @@
       `;
     },
     init: function (winId) {
-      const el = windows[winId].el;
-      const textarea = el.querySelector('#notepad-text');
+      var w = windows[winId];
+      if (!w) return;
+      var el = w.el;
+      var textarea = el.querySelector('#notepad-text');
       if (!textarea) return;
-      const menubar = el.querySelector('.window-menubar');
+      var menubar = el.querySelector('.window-menubar');
+      var statusbar = el.querySelector('.window-statusbar');
 
-      const statusbar = el.querySelector('.window-statusbar');
+      if (w.extraData) {
+        w.currentFile = w.extraData.fileName || null;
+        textarea.value = w.extraData.content || '';
+      } else {
+        w.currentFile = null;
+      }
 
-      menubar.innerHTML = '<span id="np-new">File</span><span id="np-undo">Edit</span><span id="np-wrap">Format</span><span id="np-about">Help</span>';
+      menubar.innerHTML = '<span id="np-file" style="position:relative;cursor:pointer;">File</span><span id="np-recent" style="position:relative;cursor:pointer;">Recent</span><span id="np-undo">Edit</span><span id="np-wrap">Format</span><span id="np-about">Help</span>';
 
-      el.querySelector('#np-new').addEventListener('click', function () {
+      var fileDropdown = document.createElement('div');
+      fileDropdown.className = 'menu-dropdown';
+      fileDropdown.id = 'np-file-dropdown';
+      fileDropdown.style.cssText = 'display:none;position:absolute;top:100%;left:0;background:var(--bg-window);border:1px solid var(--border-shadow);z-index:100;min-width:140px;padding:4px 0;';
+      fileDropdown.innerHTML = '<div class="menu-item" id="np-new-file" style="padding:4px 12px;cursor:pointer;font-size:11px;">New</div><div class="menu-item" id="np-save-file" style="padding:4px 12px;cursor:pointer;font-size:11px;">Save...</div>';
+      el.querySelector('#np-file').appendChild(fileDropdown);
+
+      el.querySelector('#np-file').addEventListener('click', function (e) {
+        e.stopPropagation();
+        var dd = document.getElementById('np-file-dropdown');
+        var visible = dd.style.display === 'block';
+        closeAllDropdowns();
+        if (!visible) dd.style.display = 'block';
+      });
+
+      document.getElementById('np-new-file').addEventListener('click', function (e) {
+        e.stopPropagation();
+        closeAllDropdowns();
         if (textarea.value) {
           var blob = new Blob([textarea.value], { type: 'text/plain' });
           var a = document.createElement('a');
@@ -931,16 +1004,77 @@
           URL.revokeObjectURL(a.href);
         }
         textarea.value = '';
+        w.currentFile = null;
         statusbar.innerHTML = '<span style="flex:1;">Untitled</span><span class="resize-grip">▤</span>';
       });
+
+      document.getElementById('np-save-file').addEventListener('click', function (e) {
+        e.stopPropagation();
+        closeAllDropdowns();
+        var blob = new Blob([textarea.value], { type: 'text/plain' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (w.currentFile || 'untitled') + '.txt';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+
+      var recentDropdown = document.createElement('div');
+      recentDropdown.className = 'menu-dropdown';
+      recentDropdown.id = 'np-recent-dropdown';
+      recentDropdown.style.cssText = 'display:none;position:absolute;top:100%;left:0;background:var(--bg-window);border:1px solid var(--border-shadow);z-index:100;min-width:180px;padding:4px 0;';
+      el.querySelector('#np-recent').appendChild(recentDropdown);
+
+      function renderRecentList() {
+        var dd = document.getElementById('np-recent-dropdown');
+        dd.innerHTML = '';
+        if (recentTextFiles.length === 0) {
+          dd.innerHTML = '<div class="menu-item" style="padding:4px 12px;font-size:11px;color:var(--text-disabled);cursor:default;">(no recent files)</div>';
+          return;
+        }
+        recentTextFiles.forEach(function (f) {
+          var item = document.createElement('div');
+          item.className = 'menu-item';
+          item.style.cssText = 'padding:4px 12px;cursor:pointer;font-size:11px;';
+          item.textContent = f;
+          item.addEventListener('click', function (e) {
+            e.stopPropagation();
+            closeAllDropdowns();
+            openTextFile(f);
+          });
+          dd.appendChild(item);
+        });
+      }
+
+      el.querySelector('#np-recent').addEventListener('click', function (e) {
+        e.stopPropagation();
+        var dd = document.getElementById('np-recent-dropdown');
+        var visible = dd.style.display === 'block';
+        closeAllDropdowns();
+        if (!visible) {
+          renderRecentList();
+          dd.style.display = 'block';
+        }
+      });
+
+      function closeAllDropdowns() {
+        document.querySelectorAll('.menu-dropdown').forEach(function (d) { d.style.display = 'none'; });
+      }
+      document.addEventListener('click', closeAllDropdowns);
 
       el.querySelector('#np-about').addEventListener('click', function () {
         statusbar.innerHTML = '<span style="flex:1;">Notepad v1.0 - trippa.day</span><span class="resize-grip">▤</span>';
       });
 
+      if (w.currentFile) {
+        addRecentTextFile(w.currentFile);
+        statusbar.innerHTML = '<span style="flex:1;">' + w.currentFile + '</span><span class="resize-grip">▤</span>';
+      }
+
       textarea.addEventListener('input', function () {
-        const lines = textarea.value.split('\n').length;
-        statusbar.innerHTML = '<span style="flex:1;">Lines: ' + lines + '</span><span class="resize-grip">▤</span>';
+        var lines = textarea.value.split('\n').length;
+        var name = w.currentFile || 'Untitled';
+        statusbar.innerHTML = '<span style="flex:1;">' + name + ' | Lines: ' + lines + '</span><span class="resize-grip">▤</span>';
       });
     }
   };
