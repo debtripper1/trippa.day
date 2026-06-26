@@ -168,7 +168,7 @@
       '<div style="background:var(--bg,#c0c0c0);padding:16px;font-size:11px;font-family:Tahoma,Arial,sans-serif;border:2px solid;border-color:var(--border-shadow,#808080) var(--border-highlight,#fff) var(--border-highlight,#fff) var(--border-shadow,#808080);">' +
       '<div style="display:flex;align-items:flex-start;gap:12px;">' +
       '<span style="font-size:28px;">🛈</span>' +
-      '<span style="padding-top:6px;">nobody is coming to save you</span>' +
+      '<span style="padding-top:6px;color:var(--text-primary,#000);">nobody is coming to save you</span>' +
       '</div></div>';
 
     document.body.appendChild(bg);
