@@ -302,6 +302,7 @@
       item.addEventListener('dblclick', function () {
         var name = this.dataset.name;
         if (/\.txt$/i.test(name)) openTextFile(name);
+        else if (name === "OCCAM'S SLUMBER.mp3" && !darkMode) showFileError();
       });
     });
 
@@ -333,7 +334,7 @@
     { file: 'SAYING GOODBYE.txt', content: 'SAYING GOODBYE\nAlbum: GOOD HOPE\n\n(no lyrics available)' },
     { file: 'FOX AND THE HOUND.txt', content: 'FOX AND THE HOUND\nAlbum: GOOD HOPE\n\nI\'m drawin\' down my bead on you\nBut you zig-zag too damned quick\nLost your scent, but caught your tracks\nAs you cross the creek\n\nNearly got a hold of you\nBut your fur was too damned slick\nTracks are melting into the mud\nFog\'s rollin\' in quick\n\nI rifle through the river reeds\nTryin\' to track you down\nTryin\' to get a hold of you\nBut you don\'t make a sound\n\nI\'d holler but I\'d spook you\nI wanna call you out\nI want my oldest friend back in my arms\nWe\'re like the fox and the hound\n\nIf I had to lose you\nI\'d sooner lose myself\nIf you had to go away\nLose your hair and health\n\nIf I had to watch you die\nI\'d rather kill myself\nIf you left as soft as lullabies\nI think that it might help\n\nIf I saw you suffering\nI\'d do all I can to help\nIf one of us gets left behind\nI just don\'t want to dwell\n\nIf I saw your fading smile\nTowards the bitter end\nI would rather lose my mind\nThan lose my oldest friend\n\nWhen we were younger\nAll the lights got brighter\nOur brotherhood was skyward bound\nNow I\'m mature I see a ticking timebomb\nWe\'re like the fox and the hound\n\nYou always run away\nKeep everyone at bay\nI wanna keep you safe\nYou wanna run away.' },
     { file: 'DADDY LONG LEGS.txt', content: 'DADDY LONG LEGS\nAlbum: GOOD HOPE\n\ni spin around all circular,\ni turn around, you\'re taller,\nyour chest got triangular,\nyour jaw got straight, and angular.\n\nwhat lessons could i heed,\nfull to brim, with a want for a need,\nwhere you stand, i once stood,\nif youth knew, if age could.\n\na daddy long legs keeps spinning web,\non my passenger mirror,\ni named him after my grandaddy, fred,\ni hope he makes it through the winter,\nthe spider, that is, my grandfather\'s gone,\nhe died ten years before i was born.\n\ni never got to meet the man,\nwho made my dad my dad,\nonly the stories he\'s told,\nhis jet black hair slicked back.\n\ni never got to meet my nan,\nto hear the life she had,\nshe died when dad was 9 years old,\ni hear him call her back.\n\ncountless, the things i\'ve done and said,\nwith innocent intentions,\nthey\'re still there now, just percolating,\nunderneath the caldera,\n\nin spite of the years,\nthat pass in the wind,\ni never knew where i was going,\ni never cared where i\'d been.' },
-    { file: 'GRIEVING IN ADVANCE.txt', content: 'GRIEVING IN ADVANCE\nAlbum: GOOD HOPE\n\nFound by navigating to goodhope/grieving.html in the Web Browser.' }
+    { file: 'GRIEVING IN ADVANCE.txt', content: 'GRIEVING IN ADVANCE\nAlbum: GOOD HOPE\n\nStretching my wings in the scud\nDrifting through the breeze, like an angel, above\nWho made this loveliness? Gift on Earth?\nLove until it hurts?\nI need answers, what did we pay for this world?\n\nSearching for gold in the mud\nSifting through debris, that\'s been covered in blood\nWho made this loneliness? Hell on Earth?\nHate until it burns?\nI need answers, why should I pray for this world?\n\nWhy should I pray for this pain, heartache and loss?\nWhy should I slave through the days, laden and lost?\nWhy should I stay, and not go away\nTil the days and the nights turn to dust\nAnd blow away\n\nThere\'s a truth in death\nAnd it says the words unsaid\nI know, that conversation waits patient for deathbed\nAnd in it\'s light,\nas the glory comes to life\nI\'m shown, in desperation, I am nurtured and kept fed\nThe waters flow,\n\nBut, I killed him\nIn a Lacanian way\nI was journeying\nI\'m a murderer\nHe didn\'t deserve it\n\nI lament it when I think of him\nAnd it\'s hurting\nI got blood on my hands\nGet out, this spot, be damned\nI\'m grieving in advance\nI\'m grieving in advance\n\nMay the rains coming down wash away.' }
   ];
 
   function addUnlockNote(idx) {
@@ -558,6 +559,25 @@
     });
     document.body.appendChild(toast);
     setTimeout(function () { if (toast.parentNode) toast.remove(); }, 6000);
+  }
+
+  function showFileError() {
+    var existing = document.querySelector('.file-error-dlg');
+    if (existing) existing.remove();
+    var dlg = document.createElement('div');
+    dlg.className = 'file-error-dlg';
+    dlg.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:99999;display:flex;align-items:center;justify-content:center;';
+    dlg.innerHTML = '<div style="background:#c0c0c0;border:2px solid;border-color:#dfdfdf #808080 #808080 #dfdfdf;padding:0;min-width:320px;max-width:400px;box-shadow:4px 4px 10px rgba(0,0,0,0.5);font-family:Arial;font-size:11px;">'
+      + '<div style="background:linear-gradient(90deg,#000080,#1084d0);color:#fff;padding:3px 6px;font-weight:bold;font-size:11px;display:flex;align-items:center;">'
+      + '<span style="margin-right:4px;">⚠</span><span style="flex:1;">Error</span><span class="file-error-close" style="cursor:pointer;font-size:12px;padding:0 4px;">✕</span></div>'
+      + '<div style="padding:16px 20px;display:flex;align-items:flex-start;gap:12px;">'
+      + '<img src="assets/icons/msg_error-0.png" width="32" height="32" alt="!">'
+      + '<div><span style="font-weight:bold;font-size:12px;color:#000;">File Unavailable</span><br><span style="font-size:11px;color:#333;line-height:1.4;">This file may be corrupt, missing, or requires additional system components.<br><br>Please delete this file or contact your system administrator.</span></div></div>'
+      + '<div style="padding:8px 12px;text-align:center;border-top:1px solid #808080;">'
+      + '<span class="file-error-ok" style="background:#c0c0c0;border:2px outset #dfdfdf;padding:3px 24px;cursor:pointer;font-family:Arial;font-size:11px;display:inline-block;user-select:none;" tabindex="0">OK</span></div></div>';
+    document.body.appendChild(dlg);
+    dlg.querySelector('.file-error-close').addEventListener('click', function () { dlg.remove(); });
+    dlg.querySelector('.file-error-ok').addEventListener('click', function () { dlg.remove(); });
   }
 
   function refreshMusicPlayer() {
