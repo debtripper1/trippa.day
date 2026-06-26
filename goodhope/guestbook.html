@@ -86,12 +86,12 @@
 <tr><td>
 <font face="Arial" size="2" color="#888888"><b>Leave a message</b></font>
 <br><br>
-<form>
+<form id="gb-form">
 <font face="Arial" size="1" color="#666666">Name:</font><br>
 <input type="text" size="30" style="background:#000;color:#888;border:1px solid #444;font-family:Arial;font-size:11px;padding:2px;"><br><br>
 <font face="Arial" size="1" color="#666666">Message:</font><br>
 <textarea rows="5" cols="50" style="background:#000;color:#888;border:1px solid #444;font-family:Arial;font-size:11px;padding:2px;"></textarea><br><br>
-<input type="button" value="sign guestbook" onclick="alert('guestbook is not currently accepting entries. try again later.')" style="background:#000;color:#888;border:1px solid #444;font-family:Arial;font-size:11px;padding:3px 12px;cursor:pointer;">
+<input type="button" value="sign guestbook" id="gb-submit" style="background:#000;color:#888;border:1px solid #444;font-family:Arial;font-size:11px;padding:3px 12px;cursor:pointer;">
 </form>
 </td></tr>
 </table>
@@ -109,6 +109,18 @@
 
 <br><br>
 
+<script>
+document.getElementById('gb-submit').addEventListener('click', function() {
+  var msg = document.querySelector('#gb-form textarea').value;
+  var name = document.querySelector('#gb-form input[type=text]').value;
+  if (msg.toLowerCase().indexOf('saying goodbye') !== -1 || msg.toLowerCase().indexOf('goodbye') !== -1 || name.toLowerCase().indexOf('goodbye') !== -1) {
+    try { parent.postMessage('unlock:goodbye', '*'); } catch(e) {}
+    alert('your message has been received. thank you.');
+  } else {
+    alert('guestbook is not currently accepting entries. try again later.');
+  }
+});
+</script>
 </center>
 
 </body>

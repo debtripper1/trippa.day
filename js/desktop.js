@@ -420,6 +420,7 @@
     { album: 'FROSTFIRE', file: 'VALLEY OF CHARCOAL.mp3', icon: '<img src="assets/icons/wia_img_color_sound-0.png" width="16" height="16">' },
     { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '<img src="assets/icons/mixer_cd_sound-0.png" width="16" height="16">' },
     { album: 'FROSTFIRE', file: 'AMBER GLASS.mp3', icon: '<img src="assets/icons/keyboard_musical.png" width="16" height="16">' },
+    { album: 'GOOD HOPE', file: 'SAYING GOODBYE.mp3', icon: '<img src="assets/icons/media_player_file-0.png" width="16" height="16">' },
   ];
 
   function getFilteredTracks() {
@@ -1750,6 +1751,13 @@
 
   /* ========== SECRET UNLOCK TRIGGERS ========== */
   document.addEventListener('click', function (e) { tryUnlock(e); });
+  window.addEventListener('message', function (e) {
+    if (e.data === 'unlock:goodbye' && !unlocked.has(16)) {
+      unlocked.add(16);
+      refreshMusicPlayer();
+      showUnlockToast(16);
+    }
+  });
 
   /* ========== BROWSER RESIZE — reflow maximized windows ========== */
   window.addEventListener('resize', function () {
