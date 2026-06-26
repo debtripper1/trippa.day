@@ -1355,6 +1355,71 @@
     }
   };
 
+  miniApps.browser = {
+    title: 'Web Browser',
+    icon: '<img src="assets/icons/world.png" width="16" height="16">',
+    width: 900,
+    height: 600,
+    statusText: 'Ready',
+    content: function () {
+      return `
+        <div style="display:flex;flex-direction:column;height:100%;">
+          <div style="display:flex;align-items:center;gap:4px;padding:3px;border-bottom:1px solid var(--border-shadow);background:var(--bg-window);">
+            <span class="btn-98" id="wb-back" style="padding:2px 8px;font-size:11px;">◀</span>
+            <span class="btn-98" id="wb-fwd" style="padding:2px 8px;font-size:11px;">▶</span>
+            <span class="btn-98" id="wb-refresh" style="padding:2px 8px;font-size:12px;">↻</span>
+            <span class="btn-98" id="wb-home" style="padding:2px 8px;font-size:11px;">🏠</span>
+            <span style="font-size:10px;color:var(--text-disabled);margin:0 2px;">Address</span>
+            <input id="wb-url" style="flex:1;background:var(--bg-input);border:1px solid var(--border-shadow);color:var(--text-primary);padding:2px 4px;font-size:11px;outline:none;font-family:'Courier New',monospace;" value="goodhope/index.html">
+            <span class="btn-98" id="wb-go" style="padding:2px 10px;font-size:11px;">Go</span>
+          </div>
+          <iframe id="wb-frame" style="flex:1;border:none;background:#fff;" src="about:blank"></iframe>
+        </div>
+      `;
+    },
+    init: function (winId) {
+      const el = windows[winId].el;
+      const frame = el.querySelector('#wb-frame');
+      const urlInput = el.querySelector('#wb-url');
+      const backBtn = el.querySelector('#wb-back');
+      const fwdBtn = el.querySelector('#wb-fwd');
+      const refreshBtn = el.querySelector('#wb-refresh');
+      const homeBtn = el.querySelector('#wb-home');
+      const goBtn = el.querySelector('#wb-go');
+      const statusbar = el.querySelector('.window-statusbar');
+
+      var history = ['goodhope/index.html'];
+      var historyIdx = 0;
+
+      function navigate(url) {
+        frame.src = url;
+        urlInput.value = url;
+        if (historyIdx < history.length - 1) history = history.slice(0, historyIdx + 1);
+        history.push(url);
+        historyIdx = history.length - 1;
+        statusbar.innerHTML = '<span style="flex:1;">Opening ' + url + '...</span><span class="resize-grip">▤</span>';
+      }
+
+      goBtn.addEventListener('click', function () { navigate(urlInput.value); });
+      urlInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') navigate(urlInput.value); });
+
+      backBtn.addEventListener('click', function () {
+        if (historyIdx > 0) { historyIdx--; frame.src = history[historyIdx]; urlInput.value = history[historyIdx]; }
+      });
+      fwdBtn.addEventListener('click', function () {
+        if (historyIdx < history.length - 1) { historyIdx++; frame.src = history[historyIdx]; urlInput.value = history[historyIdx]; }
+      });
+      refreshBtn.addEventListener('click', function () { frame.src = frame.src; });
+      homeBtn.addEventListener('click', function () { navigate('goodhope/index.html'); });
+
+      frame.addEventListener('load', function () {
+        statusbar.innerHTML = '<span style="flex:1;">Done</span><span class="resize-grip">▤</span>';
+      });
+
+      navigate('goodhope/index.html');
+    }
+  };
+
   /* ========== WINDOW EVENTS ========== */
   function bindWindowEvents(win, id) {
     const titlebar = win.querySelector('.window-titlebar');
