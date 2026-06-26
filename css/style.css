@@ -771,8 +771,17 @@ html, body {
 }
 
 /* === Paint === */
+.paint-tool:hover {
+  background: var(--bg-hover) !important;
+}
+.paint-tool[style*="var(--accent)"]:hover {
+  background: var(--accent) !important;
+}
 .paint-color:hover {
   transform: scale(1.2);
+}
+.paint-width:hover {
+  background: var(--bg-hover) !important;
 }
 
 /* === Music Player === */

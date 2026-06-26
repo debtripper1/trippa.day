@@ -940,19 +940,44 @@
   miniApps.paint = {
     title: 'Paint',
     icon: '<img src="assets/icons/paint.png" width="16" height="16">',
-    width: 600,
-    height: 460,
+    width: 800,
+    height: 540,
     statusText: 'Ready',
     content: function () {
+      const tools = [
+        { id: 'pencil', label: '✏' },
+        { id: 'brush', label: '🖌' },
+        { id: 'eraser', label: '◇' },
+        { id: 'fill', label: '▣' },
+        { id: 'line', label: '╱' },
+        { id: 'rect', label: '▭' },
+        { id: 'ellipse', label: '◯' },
+        { id: 'spray', label: '⁂' },
+      ];
+      const widths = [1, 3, 5, 8];
       const colors = ['#ffffff','#c8c8c8','#888888','#000000','#8a1a1a','#cc3333','#ff6666','#cc8833','#ffcc33','#ffff66','#336633','#4caf50','#66cc66','#1a5276','#4a6fa5','#66aaff','#4a1a6e','#8833aa','#cc66ff','#cc6699'];
-      let html = '<div style="display:flex;flex-direction:column;height:100%;">';
-      html += '<div style="display:flex;gap:2px;padding:4px;flex-wrap:wrap;border-bottom:1px solid var(--border-shadow);">';
-      colors.forEach((c, i) => {
-        html += `<div class="paint-color" data-color="${c}" style="width:16px;height:16px;background:${c};border:1px solid var(--border-shadow);cursor:pointer;${c === '#000000' ? 'outline:1px solid #555;' : ''}"></div>`;
+
+      let html = '<div class="paint-body" style="display:flex;flex-direction:column;height:100%;">';
+      html += '<div class="paint-workspace" style="display:flex;flex:1;min-height:0;">';
+      html += '<div class="paint-toolbox" style="display:grid;grid-template-columns:repeat(2,28px);gap:1px;padding:3px;border-right:1px solid var(--border-shadow);align-content:start;">';
+      tools.forEach(function (t, i) {
+        html += '<div class="paint-tool" data-tool="' + t.id + '" style="width:28px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;border:1px solid transparent;border-radius:2px;' + (i === 0 ? 'background:var(--accent);color:#fff;' : '') + '" title="' + t.id.charAt(0).toUpperCase() + t.id.slice(1) + '">' + t.label + '</div>';
       });
       html += '</div>';
-      html += '<div style="flex:1;position:relative;margin:4px;"><canvas id="paint-canvas" style="width:100%;height:100%;background:#fff;border:1px solid var(--border-shadow);cursor:crosshair;"></canvas></div>';
+      html += '<div class="paint-canvas-wrap" style="flex:1;position:relative;margin:3px;"><canvas id="paint-canvas" style="width:100%;height:100%;background:#fff;border:1px solid var(--border-shadow);cursor:crosshair;"></canvas></div>';
       html += '</div>';
+      html += '<div class="paint-bottom" style="display:flex;align-items:center;gap:4px;padding:3px 6px;border-top:1px solid var(--border-shadow);">';
+      html += '<div class="paint-colors" style="display:flex;gap:1px;flex-wrap:wrap;flex:1;">';
+      colors.forEach(function (c) {
+        html += '<div class="paint-color" data-color="' + c + '" style="width:14px;height:14px;background:' + c + ';border:1px solid var(--border-shadow);cursor:pointer;' + (c === '#000000' ? 'outline:1px solid #555;' : '') + '"></div>';
+      });
+      html += '</div>';
+      html += '<div class="paint-widths" style="display:flex;gap:2px;align-items:center;margin-left:6px;">';
+      widths.forEach(function (w) {
+        var sel = w === 3 ? 'background:var(--accent);' : '';
+        html += '<div class="paint-width" data-width="' + w + '" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border-shadow);border-radius:2px;' + sel + '" title="' + w + 'px"><div style="width:' + w + 'px;height:' + w + 'px;background:var(--text-primary);border-radius:50%;"></div></div>';
+      });
+      html += '</div></div></div>';
       return html;
     },
     init: function (winId) {
@@ -960,24 +985,31 @@
       const canvas = el.querySelector('#paint-canvas');
       if (!canvas) return;
       const container = canvas.parentElement;
-      function resizeCanvas() {
+      const ctx = canvas.getContext('2d');
+      const menubar = el.querySelector('.window-menubar');
+      const statusbar = el.querySelector('.window-statusbar');
+
+      menubar.innerHTML = '<span id="pt-file">File</span><span id="pt-edit">Edit</span><span id="pt-view">View</span><span id="pt-help">Help</span>';
+
+      function initSize() {
+        canvas.width = container.clientWidth - 2;
+        canvas.height = container.clientHeight - 2;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      initSize();
+
+      var ro = new ResizeObserver(function () {
+        var imgData = null;
+        try { imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); } catch (e) {}
         var w = container.clientWidth - 2;
         var h = container.clientHeight - 2;
         if (w <= 0 || h <= 0) return;
-        var imgData = null;
-        try { imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); } catch (e) {}
         canvas.width = w;
         canvas.height = h;
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, w, h);
         if (imgData) ctx.putImageData(imgData, 0, 0);
-      }
-      canvas.width = container.clientWidth - 2;
-      canvas.height = container.clientHeight - 2;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      var ro = new ResizeObserver(function () { resizeCanvas(); });
+        else { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); }
+      });
       ro.observe(container);
       var prevCleanup = windows[winId].cleanup;
       windows[winId].cleanup = function () {
@@ -985,45 +1017,161 @@
         ro.disconnect();
       };
 
-      let drawing = false;
+      let tool = 'pencil';
       let color = '#000000';
+      let lineWidth = 3;
+      let drawing = false;
       let lastX, lastY;
 
-      el.querySelectorAll('.paint-color').forEach(swatch => {
+      el.querySelectorAll('.paint-tool').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          tool = this.dataset.tool;
+          el.querySelectorAll('.paint-tool').forEach(function (b) { b.style.background = ''; b.style.color = ''; });
+          this.style.background = 'var(--accent)';
+          this.style.color = '#fff';
+          statusbar.innerHTML = '<span style="flex:1;">' + this.title + '</span><span class="resize-grip">▤</span>';
+        });
+      });
+
+      el.querySelectorAll('.paint-color').forEach(function (swatch) {
         swatch.addEventListener('click', function () {
           color = this.dataset.color;
-          el.querySelectorAll('.paint-color').forEach(s => s.style.outline = 'none');
+          el.querySelectorAll('.paint-color').forEach(function (s) { s.style.outline = 'none'; });
           this.style.outline = '1px solid var(--accent)';
           this.style.outlineOffset = '1px';
         });
       });
 
+      el.querySelectorAll('.paint-width').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          lineWidth = parseInt(this.dataset.width);
+          el.querySelectorAll('.paint-width').forEach(function (b) { b.style.background = ''; });
+          this.style.background = 'var(--accent)';
+        });
+      });
+
       function getPos(e) {
-        const rect = canvas.getBoundingClientRect();
+        var rect = canvas.getBoundingClientRect();
         return { x: e.clientX - rect.left, y: e.clientY - rect.top };
       }
 
+      function floodFill(sx, sy, fillColor) {
+        var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var d = imgData.data, w = canvas.width, h = canvas.height;
+        var si = (sy * w + sx) * 4;
+        var sr = d[si], sg = d[si + 1], sb = d[si + 2];
+        var fr = parseInt(fillColor.slice(1, 3), 16), fg = parseInt(fillColor.slice(3, 5), 16), fb = parseInt(fillColor.slice(5, 7), 16);
+        if (sr === fr && sg === fg && sb === fb) return;
+        var stack = [[sx, sy]], vis = new Uint8Array(w * h);
+        while (stack.length) {
+          var p = stack.pop(), px = p[0], py = p[1];
+          if (px < 0 || px >= w || py < 0 || py >= h || vis[py * w + px]) continue;
+          vis[py * w + px] = 1;
+          var idx = (py * w + px) * 4;
+          if (d[idx] !== sr || d[idx + 1] !== sg || d[idx + 2] !== sb) continue;
+          d[idx] = fr; d[idx + 1] = fg; d[idx + 2] = fb; d[idx + 3] = 255;
+          stack.push([px + 1, py], [px - 1, py], [px, py + 1], [px, py - 1]);
+        }
+        ctx.putImageData(imgData, 0, 0);
+      }
+
+      function strokeShape(x1, y1, x2, y2, type) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        if (type === 'line') { ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); }
+        else if (type === 'rect') { ctx.rect(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1)); }
+        else if (type === 'ellipse') { ctx.ellipse((x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x2 - x1) / 2, Math.abs(y2 - y1) / 2, 0, 0, Math.PI * 2); }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      var shapeStart = null;
+
       canvas.addEventListener('mousedown', function (e) {
+        var p = getPos(e);
+        if (tool === 'fill') { floodFill(Math.round(p.x), Math.round(p.y), color); return; }
         drawing = true;
-        const p = getPos(e);
         lastX = p.x; lastY = p.y;
+        if (['line', 'rect', 'ellipse'].indexOf(tool) !== -1) {
+          shapeStart = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        }
       });
 
       canvas.addEventListener('mousemove', function (e) {
         if (!drawing) return;
-        const p = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(p.x, p.y);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
-        ctx.stroke();
-        lastX = p.x; lastY = p.y;
+        var p = getPos(e);
+        if (['line', 'rect', 'ellipse'].indexOf(tool) !== -1) {
+          if (shapeStart) ctx.putImageData(shapeStart, 0, 0);
+          strokeShape(lastX, lastY, p.x, p.y, tool);
+        } else if (tool === 'pencil' || tool === 'brush') {
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(p.x, p.y);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = tool === 'pencil' ? 1 : lineWidth;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+          lastX = p.x; lastY = p.y;
+        } else if (tool === 'eraser') {
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(p.x, p.y);
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = lineWidth * 3 + 2;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+          lastX = p.x; lastY = p.y;
+        } else if (tool === 'spray') {
+          for (var i = 0; i < 10; i++) {
+            var ox = (Math.random() - 0.5) * lineWidth * 4;
+            var oy = (Math.random() - 0.5) * lineWidth * 4;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(p.x + ox, p.y + oy, lineWidth > 3 ? 1.5 : 1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
       });
 
-      canvas.addEventListener('mouseup', function () { drawing = false; });
-      canvas.addEventListener('mouseleave', function () { drawing = false; });
+      canvas.addEventListener('mouseup', function (e) {
+        if (!drawing) return;
+        drawing = false;
+        if (['line', 'rect', 'ellipse'].indexOf(tool) !== -1) {
+          var p = getPos(e);
+          if (shapeStart) ctx.putImageData(shapeStart, 0, 0);
+          strokeShape(lastX, lastY, p.x, p.y, tool);
+          shapeStart = null;
+        }
+      });
+
+      canvas.addEventListener('mouseleave', function () {
+        if (drawing && ['line', 'rect', 'ellipse'].indexOf(tool) !== -1 && shapeStart) {
+          ctx.putImageData(shapeStart, 0, 0);
+          shapeStart = null;
+        }
+        drawing = false;
+      });
+
+      el.querySelector('#pt-file').addEventListener('click', function () {
+        var a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = 'untitled.png';
+        a.click();
+        statusbar.innerHTML = '<span style="flex:1;">Saved as untitled.png</span><span class="resize-grip">▤</span>';
+      });
+
+      el.querySelector('#pt-edit').addEventListener('click', function () {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        statusbar.innerHTML = '<span style="flex:1;">Cleared</span><span class="resize-grip">▤</span>';
+      });
+
+      el.querySelector('#pt-help').addEventListener('click', function () {
+        statusbar.innerHTML = '<span style="flex:1;">Paint v1.0 — trippa.day</span><span class="resize-grip">▤</span>';
+      });
     }
   };
 
