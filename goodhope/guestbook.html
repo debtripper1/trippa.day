@@ -1,134 +1,109 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
 <head>
-<title>GOOD HOPE /// guestbook</title>
+<title>good hope — guestbook</title>
 <style>
-body { background: #000; color: #c0c0c0; font-family: "Comic Sans MS", "Arial", sans-serif; }
-a:link { color: #0ff; }
-a:visited { color: #f0f; }
-blink { color: #0f0; }
-td { font-family: "Comic Sans MS", sans-serif; font-size: 12px; }
+body { background: #000; color: #c0c0c0; font-family: "Courier New", monospace; margin: 20px; }
+a { color: #808080; text-decoration: none; }
+a:hover { color: #c0c0c0; text-decoration: underline; }
+hr { border: 0; height: 1px; background: #333; }
+.title { font-size: 24px; color: #fff; letter-spacing: 6px; text-align: center; font-weight: bold; margin-top: 20px; }
+.nav { text-align: center; margin: 16px 0; font-size: 13px; }
+.nav a { margin: 0 10px; }
+.content { max-width: 540px; margin: 30px auto; font-size: 12px; color: #999; }
+.entry { padding: 10px 0; border-bottom: 1px solid #111; }
+.entry-header { font-size: 11px; color: #666; }
+.entry-name { color: #aaa; }
+.entry-date { color: #444; font-size: 10px; }
+.entry-text { font-size: 12px; color: #777; margin-top: 4px; line-height: 1.6; }
+.form-area { margin-top: 24px; padding: 12px; border: 1px solid #1a1a1a; background: #090909; }
+textarea { width: 100%; background: #000; color: #888; border: 1px solid #222; padding: 6px; font-family: "Courier New", monospace; font-size: 11px; box-sizing: border-box; }
+input { background: #000; color: #888; border: 1px solid #222; padding: 3px 6px; font-family: "Courier New", monospace; font-size: 11px; }
+input[type=submit] { background: #111; color: #888; border: 1px solid #333; padding: 4px 12px; cursor: pointer; }
+.footer { text-align: center; font-size: 10px; color: #333; margin-top: 40px; border-top: 1px solid #111; padding-top: 16px; }
+.blink { animation: blink 1.5s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
 </style>
 </head>
-<body bgcolor="#000000" text="#c0c0c0" link="#00ffff" vlink="#ff00ff">
+<body>
 
-<center>
+<div class="title">GUESTBOOK</div>
+<hr style="width:40%;">
 
-<font size="6" color="#00ff00"><b>GUESTBOOK</b></font>
+<div class="nav">
+<a href="index.html">HOME</a>
+<a href="bio.html">BIO</a>
+<a href="music.html">MUSIC</a>
+<a href="lyrics.html">LYRICS</a>
+<a href="photos.html">PHOTOS</a>
+<a href="tour.html">TOUR</a>
+<a href="guestbook.html">GUESTBOOK</a>
+<a href="links.html">LINKS</a>
+</div>
 
-<hr width="70%" color="#00ff00" size="2">
+<div class="content">
 
-<p><font size="2" color="#808080">Sign my guestbook! Or don't. I can't control you.</font></p>
+<div style="text-align:center;font-size:11px;color:#555;margin-bottom:20px;">
+Sign the guestbook, if you like.<br>
+Nobody reads it, but the gesture matters.
+</div>
 
-<br>
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">Found this through a forum post about new folk music. Didn't expect to cry on a Tuesday night. "Warm in the Dark" is devastating. Hope you're okay, whoever you are.</div>
+</div>
 
-<table border="2" cellpadding="8" cellspacing="0" width="80%" bordercolor="#00ff00">
-<tr><td bgcolor="#001000" align="center">
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">been listening to circling the drain on repeat. hit too close. hit right where it needed to. thank you.</div>
+</div>
 
-<font size="3" color="#00ff00"><b>SIGN THE GUESTBOOK</b></font>
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">three albums in one year. what happened to you? what are you running from? or toward?</div>
+</div>
 
-<form method="POST" action="nobody/reads/this.html">
-<table border="0">
-<tr>
-<td><font size="2" color="#c0c0c0">Name:</font></td>
-<td><input type="text" name="name" size="30" maxlength="50" style="background:#000;color:#0f0;border:1px solid #0f0;"></td>
-</tr>
-<tr>
-<td><font size="2" color="#c0c0c0">Email:</font></td>
-<td><input type="text" name="email" size="30" maxlength="50" style="background:#000;color:#0f0;border:1px solid #0f0;"></td>
-</tr>
-<tr>
-<td><font size="2" color="#c0c0c0">Website:</font></td>
-<td><input type="text" name="url" size="30" maxlength="50" style="background:#000;color:#0f0;border:1px solid #0f0;" value="http://"></td>
-</tr>
-<tr>
-<td valign="top"><font size="2" color="#c0c0c0">Message:</font></td>
-<td><textarea name="message" rows="5" cols="30" style="background:#000;color:#0f0;border:1px solid #0f0;">Good Hope changed my life!!!</textarea></td>
-</tr>
-<tr>
-<td colspan="2" align="center">
-<input type="submit" value="Sign!" style="background:#000;color:#0f0;border:2px outset #0f0;font-family:'Comic Sans MS';cursor:pointer;">
-<input type="reset" value="Clear" style="background:#000;color:#f00;border:2px outset #f00;font-family:'Comic Sans MS';cursor:pointer;">
-</td>
-</tr>
-</table>
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">Ravioli is the most romantic song I've ever heard and I don't know how to feel about that given the rest of the catalogue. The whiplash is real.</div>
+</div>
+
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">"If I had to watch you die, I'd rather kill myself" — that line stopped me cold. I know exactly what you mean.</div>
+</div>
+
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">you came up on my discover weekly. i thought the name was ironic. now i'm not sure about anything.</div>
+</div>
+
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">Please don't go. Please keep making music. Bloom gives me hope that you'll stay. That we'll all stay.</div>
+</div>
+
+<div class="entry">
+<div class="entry-header"><span class="entry-name">-</span> <span class="entry-date">2026</span></div>
+<div class="entry-text">i don't know if i'm alive either. thanks for making me feel less alone in that.</div>
+</div>
+
+<div class="form-area">
+<form>
+<span style="font-size:11px;color:#666;">sign the guestbook</span><br><br>
+<span style="font-size:10px;color:#444;">name</span><br>
+<input type="text" style="width:200px;"><br><br>
+<span style="font-size:10px;color:#444;">message</span><br>
+<textarea rows="4"></textarea><br><br>
+<input type="submit" value="sign" onclick="alert('guestbook is not currently accepting entries. try again later, or never.');return false;">
 </form>
+</div>
 
-<font size="1" color="#404040">(This form doesn't actually work. It's 1998, what do you expect?)</font>
+</div>
 
-</td></tr>
-</table>
-
-<br><br>
-
-<table border="1" cellpadding="6" cellspacing="0" width="85%" bordercolor="#808080">
-<tr bgcolor="#0a0a0a"><td colspan="2"><font size="3" color="#ffffff"><b>RECENT ENTRIES</b></font></td></tr>
-
-<tr>
-<td width="25%" valign="top" bgcolor="#0a000a">
-<font size="2" color="#ff00ff"><b>xXx_darkangel_xXx</b></font><br>
-<font size="1" color="#606060">darkangel@geocities.com</font>
-</td>
-<td width="75%" bgcolor="#0a000a">
-<font size="2" color="#c0c0c0">OMG I saw them play in my GARAGE last month and it was SO DEEP. They played for 4 hours and I missed work the next day but WORTH IT. Their music speaks to my SOUL which is DARK and FULL OF MYSTERY. \m/</font>
-</td>
-</tr>
-
-<tr>
-<td width="25%" valign="top" bgcolor="#000a0a">
-<font size="2" color="#00ffff"><b>CoolDude84</b></font><br>
-<font size="1" color="#606060">nospam@hotmail.com</font>
-</td>
-<td width="75%" bgcolor="#000a0a">
-<font size="2" color="#c0c0c0">i dont get it. is this a band or a joke? i listened to "furniture noises" and it sounded like someone dropping things in another room for 40 minutes. my mom said turn it off. 2/10</font>
-</td>
-</tr>
-
-<tr>
-<td width="25%" valign="top" bgcolor="#0a0a00">
-<font size="2" color="#ffff00"><b>GoodHopeFan_1997</b></font><br>
-<font size="1" color="#606060">—</font>
-</td>
-<td width="75%" bgcolor="#0a0a00">
-<font size="2" color="#c0c0c0">I've been following Good Hope since 1994 and I still don't know if they're real. I called the number on their cassette and a man said "stop calling this number." Was that The Hope? I'll never know. See you at the Moon show.</font>
-</td>
-</tr>
-
-<tr>
-<td width="25%" valign="top" bgcolor="#000000">
-<font size="2" color="#808080"><b>someone</b></font><br>
-<font size="1" color="#606060">—</font>
-</td>
-<td width="75%" bgcolor="#000000">
-<font size="2" color="#c0c0c0">this website hurts my eyes. the green is too bright.</font>
-</td>
-</tr>
-
-<tr>
-<td width="25%" valign="top" bgcolor="#0a0000">
-<font size="2" color="#ff4444"><b>Kevin</b></font><br>
-<font size="1" color="#606060">—</font>
-</td>
-<td width="75%" bgcolor="#0a0000">
-<font size="2" color="#c0c0c0">I'm the seagull who guested on the album. AMA.</font>
-</td>
-</tr>
-
-</table>
-
-<br><br>
-
-<font size="2">
-<a href="index.html">[ BACK TO MAIN ]</a>
-</font>
-
-<br><br>
-
-<font size="1" color="#333">
-This guestbook is not monitored. Nothing is monitored. We are alone.
-</font>
-
-</center>
+<div class="footer">
+good hope — <span style="color:#333;">a little spiral of my own</span>
+</div>
 
 </body>
 </html>
