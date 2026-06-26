@@ -109,15 +109,43 @@
 
 <br><br>
 
+<div id="win98-dlg-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:9999;">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#c0c0c0;border:2px solid;border-color:#dfdfdf #808080 #808080 #dfdfdf;padding:0;min-width:280px;max-width:400px;box-shadow:4px 4px 10px rgba(0,0,0,0.5);font-family:Arial;font-size:11px;">
+    <div style="background:linear-gradient(90deg,#000080,#1084d0);color:#fff;padding:3px 4px;font-weight:bold;font-size:11px;display:flex;align-items:center;">
+      <span style="margin-right:4px;font-size:13px;">🖥</span>
+      <span id="win98-dlg-title" style="flex:1;">Message</span>
+      <span id="win98-dlg-close" style="cursor:pointer;font-size:12px;padding:0 4px;line-height:1;">✕</span>
+    </div>
+    <div style="padding:16px 20px;display:flex;align-items:flex-start;gap:12px;">
+      <span style="font-size:28px;flex-shrink:0;">💬</span>
+      <span id="win98-dlg-msg" style="font-family:'Courier New',monospace;font-size:12px;color:#000;line-height:1.4;padding-top:4px;"></span>
+    </div>
+    <div style="padding:8px 12px;text-align:center;border-top:1px solid #808080;">
+      <span id="win98-dlg-ok" style="background:#c0c0c0;border:2px outset #dfdfdf;padding:3px 24px;cursor:pointer;font-family:Arial;font-size:11px;display:inline-block;user-select:none;" tabindex="0">OK</span>
+    </div>
+  </div>
+</div>
+
 <script>
+function showDialog(title, msg) {
+  document.getElementById('win98-dlg-title').textContent = title;
+  document.getElementById('win98-dlg-msg').textContent = msg;
+  document.getElementById('win98-dlg-overlay').style.display = 'block';
+}
+function closeDialog() {
+  document.getElementById('win98-dlg-overlay').style.display = 'none';
+}
+document.getElementById('win98-dlg-ok').addEventListener('click', closeDialog);
+document.getElementById('win98-dlg-close').addEventListener('click', closeDialog);
+
 document.getElementById('gb-submit').addEventListener('click', function() {
   var msg = document.querySelector('#gb-form textarea').value;
   var name = document.querySelector('#gb-form input[type=text]').value;
   if (msg.toLowerCase().indexOf('saying goodbye') !== -1 || msg.toLowerCase().indexOf('goodbye') !== -1 || name.toLowerCase().indexOf('goodbye') !== -1) {
     try { parent.postMessage('unlock:goodbye', '*'); } catch(e) {}
-    alert('your message has been received. thank you.');
+    showDialog('Message', 'your message has been received. thank you.');
   } else {
-    alert('guestbook is not currently accepting entries. try again later.');
+    showDialog('Message', 'guestbook is not currently accepting entries. try again later.');
   }
 });
 </script>

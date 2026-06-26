@@ -233,8 +233,8 @@
   const virtualFS = {
     'root': { 'Music': { type: 'folder', icon: '📁' }, 'Documents': { type: 'folder', icon: '📁' }, 'Downloads': { type: 'folder', icon: '📁' }, 'Apps': { type: 'folder', icon: '📁' }, 'Projects': { type: 'folder', icon: '📁' }, 'Desktop': { type: 'folder', icon: '📁' } },
     'Music': { 'track1.mp3': { type: 'file', icon: '🎵', size: '5.2 MB' }, 'track2.mp3': { type: 'file', icon: '🎵', size: '4.8 MB' }, 'album-cover.jpg': { type: 'file', icon: '🖼️', size: '124 KB' } },
-    'Documents': { 'notes.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'readme.md': { type: 'file', icon: '📄', size: '8 KB' }, 'budget.xlsx': { type: 'file', icon: '📊', size: '64 KB' } },
-    'Downloads': { 'trippa-theme-v1.zip': { type: 'file', icon: '📄', size: '2.4 MB' }, 'wallpaper-dark.png': { type: 'file', icon: '🖼️', size: '856 KB' }, 'music-setup.msi': { type: 'file', icon: '💿', size: '14.2 MB' }, 'readme.txt': { type: 'file', icon: '📄', size: '2 KB' } },
+    'Documents': { 'notes.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'readme.md': { type: 'file', icon: '📄', size: '8 KB' }, 'budget.xlsx': { type: 'file', icon: '📊', size: '64 KB' }, 'hunt.txt': { type: 'file', icon: '🎯', size: '1 KB' } },
+    'Downloads': { 'trippa-theme-v1.zip': { type: 'file', icon: '📄', size: '2.4 MB' }, 'wallpaper-dark.png': { type: 'file', icon: '🖼️', size: '856 KB' }, 'music-setup.msi': { type: 'file', icon: '💿', size: '14.2 MB' }, 'readme.txt': { type: 'file', icon: '📄', size: '2 KB' }, 'spider.txt': { type: 'file', icon: '🕷️', size: '1 KB' } },
     'Apps': { 'Snake': { type: 'app', icon: '<img src=\"assets/icons/program_manager.png\" width=\"28\" height=\"28\">', app: 'snake' }, 'Notepad': { type: 'app', icon: '<img src=\"assets/icons/notepad.png\" width=\"28\" height=\"28\">', app: 'notepad' }, 'Paint': { type: 'app', icon: '<img src=\"assets/icons/paint.png\" width=\"28\" height=\"28\">', app: 'paint' }, 'Calculator': { type: 'app', icon: '<img src=\"assets/icons/computer.png\" width=\"28\" height=\"28\">', app: 'calc' }, 'Music Player': { type: 'app', icon: '<img src=\"assets/icons/sound.png\" width=\"28\" height=\"28\">', app: 'music' } },
     'Projects': { 'index.html': { type: 'file', icon: '📄', size: '3 KB' }, 'style.css': { type: 'file', icon: '📄', size: '12 KB' }, 'desktop.js': { type: 'file', icon: '📄', size: '18 KB' }, 'build.bat': { type: 'file', icon: '⚙️', size: '1 KB' } },
     'Desktop': {
@@ -421,6 +421,8 @@
     { album: 'FROSTFIRE', file: 'VOIDBRIDGE [TUNNEL TO NOWHERE].mp3', icon: '<img src="assets/icons/mixer_cd_sound-0.png" width="16" height="16">' },
     { album: 'FROSTFIRE', file: 'AMBER GLASS.mp3', icon: '<img src="assets/icons/keyboard_musical.png" width="16" height="16">' },
     { album: 'GOOD HOPE', file: 'SAYING GOODBYE.mp3', icon: '<img src="assets/icons/media_player_file-0.png" width="16" height="16">' },
+    { album: 'GOOD HOPE', file: 'FOX AND THE HOUND.mp3', icon: '<img src="assets/icons/media_player_file-0.png" width="16" height="16">' },
+    { album: 'GOOD HOPE', file: 'DADDY LONG LEGS.mp3', icon: '<img src="assets/icons/media_player_file-0.png" width="16" height="16">' },
   ];
 
   function getFilteredTracks() {
@@ -843,6 +845,11 @@
           score++;
           scoreEl.textContent = 'Score: ' + score;
           w.el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;">Score: ' + score + ' | Arrow keys to move</span><span class="resize-grip">▤</span>';
+          if (score === 25 && !unlocked.has(17)) {
+            unlocked.add(17);
+            refreshMusicPlayer();
+            showUnlockToast(17);
+          }
           placeFood();
         } else {
           snake.pop();
@@ -1347,6 +1354,11 @@
         if (count === ROWS * COLS - MINES) {
           gameOver = true;
           render();
+          if (!unlocked.has(18)) {
+            unlocked.add(18);
+            refreshMusicPlayer();
+            showUnlockToast(18);
+          }
           setTimeout(() => { el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;color:#4caf50;">You Win! 🎉</span><span class="resize-grip">▤</span>'; }, 100);
         }
       }
