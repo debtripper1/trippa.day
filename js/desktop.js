@@ -1390,8 +1390,15 @@
 
       var history = ['goodhope/index.html'];
       var historyIdx = 0;
+      var known = ['goodhope/index.html','goodhope/bio.html','goodhope/music.html','goodhope/tour.html','goodhope/photos.html','goodhope/lyrics.html','goodhope/guestbook.html','goodhope/links.html','goodhope/404.html'];
 
       function navigate(url) {
+        url = url.trim();
+        if (!url || url === 'about:blank') url = 'goodhope/index.html';
+        if (known.indexOf(url) === -1) {
+          url = 'goodhope/404.html';
+          urlInput.value = url;
+        }
         frame.src = url;
         urlInput.value = url;
         if (historyIdx < history.length - 1) history = history.slice(0, historyIdx + 1);
