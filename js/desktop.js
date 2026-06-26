@@ -945,14 +945,14 @@
     statusText: 'Ready',
     content: function () {
       const tools = [
-        { id: 'pencil', label: '✏' },
-        { id: 'brush', label: '🖌' },
-        { id: 'eraser', label: '◇' },
-        { id: 'fill', label: '▣' },
-        { id: 'line', label: '╱' },
-        { id: 'rect', label: '▭' },
-        { id: 'ellipse', label: '◯' },
-        { id: 'spray', label: '⁂' },
+        { id: 'pencil', label: '<img src="assets/icons/pt-pencil.png" width="22" height="22">' },
+        { id: 'brush', label: '<img src="assets/icons/pt-brush.png" width="22" height="22">' },
+        { id: 'eraser', label: '<img src="assets/icons/pt-eraser.png" width="22" height="22">' },
+        { id: 'fill', label: '<img src="assets/icons/pt-fill.png" width="22" height="22">' },
+        { id: 'line', label: '<img src="assets/icons/pt-line.png" width="22" height="22">' },
+        { id: 'rect', label: '<img src="assets/icons/pt-rect.png" width="22" height="22">' },
+        { id: 'ellipse', label: '<img src="assets/icons/pt-ellipse.png" width="22" height="22">' },
+        { id: 'spray', label: '<img src="assets/icons/pt-spray.png" width="22" height="22">' },
       ];
       const widths = [1, 3, 5, 8];
       const colors = ['#ffffff','#c8c8c8','#888888','#000000','#8a1a1a','#cc3333','#ff6666','#cc8833','#ffcc33','#ffff66','#336633','#4caf50','#66cc66','#1a5276','#4a6fa5','#66aaff','#4a1a6e','#8833aa','#cc66ff','#cc6699'];
@@ -961,7 +961,7 @@
       html += '<div class="paint-workspace" style="display:flex;flex:1;min-height:0;">';
       html += '<div class="paint-toolbox" style="display:grid;grid-template-columns:repeat(2,28px);gap:1px;padding:3px;border-right:1px solid var(--border-shadow);align-content:start;">';
       tools.forEach(function (t, i) {
-        html += '<div class="paint-tool" data-tool="' + t.id + '" style="width:28px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;border:1px solid transparent;border-radius:2px;' + (i === 0 ? 'background:var(--accent);color:#fff;' : '') + '" title="' + t.id.charAt(0).toUpperCase() + t.id.slice(1) + '">' + t.label + '</div>';
+        html += '<div class="paint-tool" data-tool="' + t.id + '" style="width:28px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid transparent;border-radius:2px;' + (i === 0 ? 'background:var(--accent);' : '') + '" title="' + t.id.charAt(0).toUpperCase() + t.id.slice(1) + '">' + t.label + '</div>';
       });
       html += '</div>';
       html += '<div class="paint-canvas-wrap" style="flex:1;position:relative;margin:3px;"><canvas id="paint-canvas" style="width:100%;height:100%;background:#fff;border:1px solid var(--border-shadow);cursor:crosshair;"></canvas></div>';
@@ -1026,9 +1026,8 @@
       el.querySelectorAll('.paint-tool').forEach(function (btn) {
         btn.addEventListener('click', function () {
           tool = this.dataset.tool;
-          el.querySelectorAll('.paint-tool').forEach(function (b) { b.style.background = ''; b.style.color = ''; });
+          el.querySelectorAll('.paint-tool').forEach(function (b) { b.style.background = ''; });
           this.style.background = 'var(--accent)';
-          this.style.color = '#fff';
           statusbar.innerHTML = '<span style="flex:1;">' + this.title + '</span><span class="resize-grip">▤</span>';
         });
       });
@@ -1111,7 +1110,7 @@
           ctx.moveTo(lastX, lastY);
           ctx.lineTo(p.x, p.y);
           ctx.strokeStyle = color;
-          ctx.lineWidth = tool === 'pencil' ? 1 : lineWidth;
+          ctx.lineWidth = lineWidth;
           ctx.lineCap = 'round';
           ctx.stroke();
           lastX = p.x; lastY = p.y;
