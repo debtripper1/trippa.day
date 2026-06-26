@@ -617,6 +617,63 @@ html, body {
   border-bottom: 1px solid var(--border-highlight);
 }
 
+.start-submenu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  color: #000;
+}
+
+.start-submenu-item:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.start-submenu-arrow {
+  margin-left: auto;
+  font-size: 8px;
+  line-height: 1;
+  color: inherit;
+}
+
+.start-submenu {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: -4px;
+  background: var(--bg-start-menu);
+  border: 2px solid var(--border-shadow);
+  border-top-color: var(--border-highlight);
+  border-left-color: var(--border-highlight);
+  box-shadow: var(--shadow-window);
+  min-width: 160px;
+  z-index: 1000;
+  padding: 4px 0;
+}
+
+.start-submenu-item:hover > .start-submenu {
+  display: block;
+}
+
+.start-submenu .start-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  color: #000;
+}
+
+.start-submenu .start-item:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* === Window Content Styles === */
 .win-list {
   list-style: none;
@@ -1266,6 +1323,31 @@ html, body {
 
 .dark-mode .start-item {
   color: var(--text-primary);
+}
+
+.dark-mode .start-submenu-item {
+  color: var(--text-primary);
+}
+
+.dark-mode .start-submenu-item:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.dark-mode .start-submenu {
+  background: var(--bg-start-menu);
+  border-color: var(--border-shadow);
+  border-top-color: var(--border-highlight);
+  border-left-color: var(--border-highlight);
+}
+
+.dark-mode .start-submenu .start-item {
+  color: var(--text-primary);
+}
+
+.dark-mode .start-submenu .start-item:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
 .dark-mode .shutdown-dialog {

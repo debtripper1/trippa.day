@@ -11,29 +11,17 @@
 <body>
   <div id="desktop">
     <div id="icon-grid">
-      <div class="desktop-icon" data-app="music" data-window="Music Player" role="button" tabindex="0" aria-label="My Music">
-        <div class="desktop-icon-img"><img src="assets/icons/sound.png" alt="" width="32" height="32"></div>
-        <div class="desktop-icon-label">My Music</div>
-      </div>
-      <div class="desktop-icon" data-app="files" data-window="File Browser" role="button" tabindex="0" aria-label="File Browser">
+      <div class="desktop-icon" data-app="files" data-window="My Computer" role="button" tabindex="0" aria-label="My Computer">
         <div class="desktop-icon-img"><img src="assets/icons/computer.png" alt="" width="32" height="32"></div>
-        <div class="desktop-icon-label">My Files</div>
+        <div class="desktop-icon-label">My Computer</div>
       </div>
-      <div class="desktop-icon" data-app="downloads" data-window="Downloads" role="button" tabindex="0" aria-label="Downloads">
-        <div class="desktop-icon-img"><img src="assets/icons/download.png" alt="" width="32" height="32"></div>
-        <div class="desktop-icon-label">Downloads</div>
-      </div>
-      <div class="desktop-icon" data-app="browser" data-window="Web Browser" role="button" tabindex="0" aria-label="Web Browser">
+      <div class="desktop-icon" data-app="browser" data-window="Browser" role="button" tabindex="0" aria-label="Browser">
         <div class="desktop-icon-img"><img src="assets/icons/world.png" alt="" width="32" height="32"></div>
-        <div class="desktop-icon-label">Web Browser</div>
+        <div class="desktop-icon-label">Browser</div>
       </div>
-      <div class="desktop-icon" data-app="settings" data-window="Settings" role="button" tabindex="0" aria-label="Settings">
-        <div class="desktop-icon-img"><img src="assets/icons/settings.png" alt="" width="32" height="32"></div>
-        <div class="desktop-icon-label">Settings</div>
-      </div>
-      <div class="desktop-icon" data-app="recycle" data-window="Recycle Bin" role="button" tabindex="0" aria-label="Recycle Bin">
+      <div class="desktop-icon" data-app="recycle" data-window="Bin" role="button" tabindex="0" aria-label="Bin">
         <div class="desktop-icon-img"><img src="assets/icons/recycle_bin.png" alt="" width="32" height="32"></div>
-        <div class="desktop-icon-label">Recycle Bin</div>
+        <div class="desktop-icon-label">Bin</div>
       </div>
     </div>
 
@@ -44,21 +32,50 @@
         <span>trippa.day</span>
       </div>
       <div id="start-items">
-        <div class="start-item" data-app="music">
-          <span class="start-item-icon"><img src="assets/icons/sound.png" width="16" height="16" style="vertical-align:middle;"></span>
-          <span class="start-item-label">Music Player</span>
-        </div>
-        <div class="start-item" data-app="files">
-          <span class="start-item-icon"><img src="assets/icons/computer.png" width="16" height="16" style="vertical-align:middle;"></span>
-          <span class="start-item-label">File Browser</span>
-        </div>
-        <div class="start-item" data-app="downloads">
-          <span class="start-item-icon"><img src="assets/icons/download.png" width="16" height="16" style="vertical-align:middle;"></span>
-          <span class="start-item-label">Downloads</span>
-        </div>
-        <div class="start-item" data-app="browser">
-          <span class="start-item-icon"><img src="assets/icons/world.png" width="16" height="16" style="vertical-align:middle;"></span>
-          <span class="start-item-label">Web Browser</span>
+        <div class="start-submenu-item">
+          <span class="start-item-icon"><img src="assets/icons/program_manager.png" width="16" height="16" style="vertical-align:middle;"></span>
+          <span class="start-item-label">Programs</span>
+          <span class="start-submenu-arrow">▶</span>
+          <div class="start-submenu">
+            <div class="start-submenu-item">
+              <span class="start-item-icon"><img src="assets/icons/program_manager.png" width="16" height="16" style="vertical-align:middle;"></span>
+              <span class="start-item-label">Games</span>
+              <span class="start-submenu-arrow">▶</span>
+              <div class="start-submenu">
+                <div class="start-item" data-app="snake">
+                  <span class="start-item-icon"><img src="assets/icons/program_manager.png" width="16" height="16" style="vertical-align:middle;"></span>
+                  <span class="start-item-label">Snake</span>
+                </div>
+                <div class="start-item" data-app="minesweeper">
+                  <span class="start-item-icon"><img src="assets/icons/help.png" width="16" height="16" style="vertical-align:middle;"></span>
+                  <span class="start-item-label">Minesweeper</span>
+                </div>
+              </div>
+            </div>
+            <div class="start-submenu-item">
+              <span class="start-item-icon"><img src="assets/icons/settings.png" width="16" height="16" style="vertical-align:middle;"></span>
+              <span class="start-item-label">Utilities</span>
+              <span class="start-submenu-arrow">▶</span>
+              <div class="start-submenu">
+                <div class="start-item" data-app="paint">
+                  <span class="start-item-icon"><img src="assets/icons/paint.png" width="16" height="16" style="vertical-align:middle;"></span>
+                  <span class="start-item-label">Paint</span>
+                </div>
+                <div class="start-item" data-app="notepad">
+                  <span class="start-item-icon"><img src="assets/icons/notepad.png" width="16" height="16" style="vertical-align:middle;"></span>
+                  <span class="start-item-label">Notepad</span>
+                </div>
+                <div class="start-item" data-app="calc">
+                  <span class="start-item-icon"><img src="assets/icons/computer.png" width="16" height="16" style="vertical-align:middle;"></span>
+                  <span class="start-item-label">Calculator</span>
+                </div>
+                <div class="start-item" data-app="music">
+                  <span class="start-item-icon"><img src="assets/icons/sound.png" width="16" height="16" style="vertical-align:middle;"></span>
+                  <span class="start-item-label">Music Player</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="start-item" data-app="settings">
           <span class="start-item-icon"><img src="assets/icons/settings.png" width="16" height="16" style="vertical-align:middle;"></span>
