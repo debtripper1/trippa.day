@@ -1870,13 +1870,11 @@
     item.addEventListener('mouseenter', function () {
       var sub = this.querySelector('.start-submenu');
       if (!sub) return;
-      sub.style.top = '';
+      sub.style.bottom = '';
       requestAnimationFrame(function () {
         var subRect = sub.getBoundingClientRect();
-        if (subRect.bottom > window.innerHeight) {
-          var parentRect = item.getBoundingClientRect();
-          var overflow = subRect.bottom - window.innerHeight;
-          sub.style.top = (parseFloat(sub.style.top) || -4) - overflow + 'px';
+        if (subRect.top < 0) {
+          sub.style.bottom = 'calc(100% + ' + subRect.top + 'px)';
         }
       });
     });
