@@ -3,49 +3,50 @@
 <head>
 <title>good hope /// 404</title>
 <style>
-body { background: #000; margin: 0; padding: 0; height: 100vh; display: flex; align-items: center; justify-content: center; }
-.win-box { background: #c0c0c0; border: 2px solid #fff; border-right-color: #808080; border-bottom-color: #808080; padding: 0; box-shadow: 4px 4px 0 rgba(0,0,0,0.2); font-family: "MS Sans Serif", "Arial", sans-serif; width: 420px; }
-.titlebar { background: #000080; color: #fff; padding: 3px 4px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-.titlebar img { width: 14px; height: 14px; }
-.titlebar-text { flex: 1; }
-.titlebar-close { background: #c0c0c0; color: #000; border: 1px solid #fff; border-right-color: #808080; border-bottom-color: #808080; padding: 0 6px; font-size: 11px; cursor: pointer; line-height: 16px; }
-.titlebar-close:active { border: 1px solid #808080; border-right-color: #fff; border-bottom-color: #fff; }
-.content { padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
-.icon { font-size: 32px; }
-.message { font-size: 12px; color: #000; flex: 1; }
-.message h1 { font-size: 14px; margin: 0 0 8px 0; }
-.btn-row { text-align: center; padding: 0 16px 12px 16px; }
-.btn-ok { background: #c0c0c0; border: 2px solid #fff; border-right-color: #808080; border-bottom-color: #808080; padding: 3px 24px; font-size: 11px; font-family: "MS Sans Serif", sans-serif; cursor: pointer; }
-.btn-ok:active { border: 2px solid #808080; border-right-color: #fff; border-bottom-color: #fff; }
-.details { font-size: 10px; color: #666; margin-top: 6px; }
+::-webkit-scrollbar { width: 16px; background: #c0c0c0; border-left: 1px solid #808080; }
+::-webkit-scrollbar-thumb { background: #c0c0c0; border: 1px solid; border-color: #dfdfdf #808080 #808080 #dfdfdf; }
+::-webkit-scrollbar-button { display: block; background: #c0c0c0; border: 1px solid; border-color: #dfdfdf #808080 #808080 #dfdfdf; height: 16px; width: 16px; }
+::-webkit-scrollbar-button:vertical:start { background: #c0c0c0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath d='M0 4 L4 0 L8 4 Z' fill='%23000'/%3E%3C/svg%3E") center/8px 4px no-repeat; }
+::-webkit-scrollbar-button:vertical:end { background: #c0c0c0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath d='M0 0 L4 4 L8 0 Z' fill='%23000'/%3E%3C/svg%3E") center/8px 4px no-repeat; }
+::-webkit-scrollbar-corner { background: #c0c0c0; }
+* { scrollbar-width: auto; scrollbar-color: #c0c0c0 #808080; }
 </style>
 </head>
-<body bgcolor="#000" text="#000000" link="#0000ff">
+
+<body bgcolor="#008080" text="#c0c0c0" link="#c0c0c0" vlink="#808080">
 
 <center>
-<div class="win-box">
-<div class="titlebar">
-<img src="../assets/icons/msg_error-0.png" alt="!" width="14" height="14">
-<span class="titlebar-text">Good Hope Browser</span>
-<span class="titlebar-close" onclick="history.back()">✕</span>
-</div>
-<div class="content">
-<div class="icon"><img src="../assets/icons/msg_error-0.png" width="32" height="32" alt="Error"></div>
-<div class="message">
-<h1>Page Not Found</h1>
-<b>The page you are looking for does not exist.</b><br><br>
-It may have been moved, deleted, or perhaps it never existed at all. Some pages are like that.<br><br>
+
+<br><br><br>
+
+<table width="420" border="1" bordercolor="#c0c0c0" cellpadding="0" cellspacing="0" bgcolor="#c0c0c0">
+<tr><td bgcolor="#000080" height="22" align="left" style="padding:2px 6px;">
+<font face="Arial" size="2" color="#ffffff"><b>&nbsp; Good Hope Browser</b></font>
+<font face="Arial" size="2" color="#ffffff" style="float:right;">&nbsp; &mdash; &nbsp; &#10006;</font>
+</td></tr>
+<tr><td style="padding:16px;">
+<table width="100%" border="0"><tr>
+<td width="50" valign="top" align="center">
+<img src="../assets/icons/msg_error-0.png" width="32" height="32" alt="!">
+</td>
+<td valign="top">
+<font face="Arial" size="2" color="#000000"><b>Page Not Found</b></font><br>
+<font face="Arial" size="2" color="#333333">
+The page you are looking for does not exist.<br><br>
+It may have been moved, deleted, or perhaps it never existed at all.<br><br>
 <a href="index.html">Return to the main page</a>
-<div class="details">
-Error 404 — File not found<br>
-the good hope project &copy; 2026
-</div>
-</div>
-</div>
-<div class="btn-row">
-<button class="btn-ok" onclick="location.href='index.html'">OK</button>
-</div>
-</div>
+</font><br><br>
+<font face="Arial" size="1" color="#666666">
+Error 404 &mdash; File not found<br>
+good hope &copy; 2026
+</font>
+</td></tr></table>
+</td></tr>
+<tr><td align="center" style="padding:4px 0 10px 0;">
+<button onclick="location.href='index.html'" style="background:#c0c0c0;border:2px outset #fff;font-family:Arial;font-size:11px;padding:2px 20px;cursor:pointer;">OK</button>
+</td></tr>
+</table>
+
 </center>
 
 </body>
