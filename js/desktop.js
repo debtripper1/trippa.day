@@ -142,6 +142,53 @@
     if (appType === 'recycle') {
       setTimeout(function () { bindRecycleToggle(id); }, 50);
     }
+    win.querySelector('.window-menubar').addEventListener('click', function (e) {
+      var s = e.target.closest('span');
+      if (s && s.textContent.trim() === 'Help') {
+        showHelpPopup();
+      }
+    });
+  }
+
+  function showHelpPopup() {
+    var existing = document.getElementById('help-popup');
+    if (existing) existing.remove();
+
+    var bg = document.createElement('div');
+    bg.style.cssText = 'position:fixed;inset:0;z-index:999999;background:transparent;';
+    bg.id = 'help-popup-bg';
+
+    var pop = document.createElement('div');
+    pop.id = 'help-popup';
+    pop.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000000;min-width:260px;box-shadow:2px 2px 0 #000;';
+
+    pop.innerHTML = '<div style="background:linear-gradient(90deg,#000080,#1084d0);color:#fff;padding:4px 8px;font-size:11px;font-weight:bold;font-family:Tahoma,Arial,sans-serif;display:flex;align-items:center;gap:6px;">' +
+      '<span style="flex:1;">Information</span>' +
+      '<span style="cursor:pointer;font-size:12px;" id="help-popup-close">✕</span></div>' +
+      '<div style="background:var(--bg,#c0c0c0);padding:16px;font-size:11px;font-family:Tahoma,Arial,sans-serif;border:2px solid;border-color:var(--border-shadow,#808080) var(--border-highlight,#fff) var(--border-highlight,#fff) var(--border-shadow,#808080);">' +
+      '<div style="display:flex;align-items:flex-start;gap:12px;">' +
+      '<span style="font-size:28px;">🛈</span>' +
+      '<span style="padding-top:6px;">nobody is coming to save you</span>' +
+      '</div></div>';
+
+    document.body.appendChild(bg);
+    document.body.appendChild(pop);
+
+    var t = setTimeout(function () {
+      pop.remove();
+      bg.remove();
+    }, 1000);
+
+    document.getElementById('help-popup-close').addEventListener('click', function () {
+      clearTimeout(t);
+      pop.remove();
+      bg.remove();
+    });
+    bg.addEventListener('click', function () {
+      clearTimeout(t);
+      pop.remove();
+      bg.remove();
+    });
   }
 
   function buildWindowHTML(config, id) {
