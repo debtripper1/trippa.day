@@ -1542,6 +1542,11 @@
                   cell.style.color = colors[board[r][c]] || '#fff';
                 }
               }
+            } else if (gameOver && board[r][c] === -1) {
+              cell.textContent = '💣';
+              cell.style.background = 'var(--bg-input)';
+              cell.style.border = '1px solid var(--border-shadow)';
+              cell.style.cursor = 'default';
             } else {
               cell.style.background = 'var(--bg-button)';
               cell.style.border = '1px solid var(--border-light)';
@@ -1555,7 +1560,7 @@
                 if (gameOver || revealed[rr][cc]) return;
                 reveal(rr, cc);
                 render();
-                if (board[rr][cc] === -1) { gameOver = true; render(); }
+                if (board[rr][cc] === -1) { gameOver = true; render(); el.querySelector('.window-statusbar').innerHTML = '<span style="flex:1;color:#cc3333;">Game Over</span><span class="resize-grip">▤</span>'; }
                 else { checkWin(); }
               });
             }
