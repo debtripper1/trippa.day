@@ -7,8 +7,8 @@
   let selectedIcon = null;
   let startMenuOpen = false;
   let shutdownOverlay = null;
-  let darkMode = (function () { try { return localStorage.getItem('trippa-dark') === 'true'; } catch (e) { return false; } })();
-  if (darkMode) document.body.classList.add('dark-mode');
+  try { localStorage.setItem('trippa-dark', 'false'); } catch (e) {}
+  let darkMode = false;
   let unlocked = new Set();
   let customWallpaper = null;
 
