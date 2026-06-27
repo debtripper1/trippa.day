@@ -501,7 +501,7 @@
     { album: 'MORTAL SVN', file: 'OCCAM\'S SLUMBER.mp3', icon: '<img src="assets/icons/soundvor-0.png" width="16" height="16">' },
     { album: 'MORTAL SVN', file: 'TUNNEL TO NOWHERE.mp3', icon: '<img src="assets/icons/soundyel-0.png" width="16" height="16">' },
     { album: 'MORTAL SVN', file: 'VALLEY OF CHARCOAL.mp3', icon: '<img src="assets/icons/cd_audio_cd-0.png" width="16" height="16">' },
-    { album: 'MORTAL SVN', file: 'SVNDRVNK YELLOW CORROSION.mp3', icon: '<img src="assets/icons/media_player-0.png" width="16" height="16">' },
+    { album: 'MORTAL SVN', file: 'UNDER THE MORTAL SUN.mp3', icon: '<img src="assets/icons/media_player-0.png" width="16" height="16">' },
     { album: 'FROSTFIRE', file: 'AGAINST THE FENCE.mp3', icon: '<img src="assets/icons/mixer_sound-0.png" width="16" height="16">' },
     { album: 'FROSTFIRE', file: 'BVRNING ALIVE IN THE SVN [SOMETHING IS AT THE DOOR].mp3', icon: '<img src="assets/icons/multimedia-0.png" width="16" height="16">' },
     { album: 'FROSTFIRE', file: 'MONOLITHIC TENSION.mp3', icon: '<img src="assets/icons/computer_sound-0.png" width="16" height="16">' },
