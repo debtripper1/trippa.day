@@ -1483,6 +1483,7 @@
       const minesEl = el.querySelector('#ms-mines');
       const newBtn = el.querySelector('#ms-new');
 
+      container.addEventListener('contextmenu', function (e) { e.preventDefault(); });
       const ROWS = 9, COLS = 9, MINES = 10;
       let board = [], revealed = [], gameOver = false;
 
