@@ -1002,12 +1002,15 @@
       el.addEventListener('keydown', function (e) {
         const keyMap = { ArrowUp: { x: 0, y: -1 }, ArrowDown: { x: 0, y: 1 }, ArrowLeft: { x: -1, y: 0 }, ArrowRight: { x: 1, y: 0 } };
         const nd = keyMap[e.key];
-        if (nd && !(nd.x === -dir.x && nd.y === -dir.y)) nextDir = nd;
+        if (!nd) return;
+        e.preventDefault();
+        if (!running) { startGame(); nextDir = nd; dir = nd; return; }
+        if (!(nd.x === -dir.x && nd.y === -dir.y)) nextDir = nd;
       });
 
       canvas.setAttribute('tabindex', '0');
       canvas.focus();
-      startGame();
+      draw();
 
       windows[winId].cleanup = function () {
         if (gameLoop) { clearInterval(gameLoop); gameLoop = null; }
