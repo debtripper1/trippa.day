@@ -888,7 +888,7 @@
     title: 'Snake',
     icon: '<img src="assets/icons/program_manager.png" width="16" height="16">',
     width: 480,
-    height: 440,
+    height: 490,
     statusText: 'Score: 0 | Use arrow keys',
     content: function () {
       return `
@@ -973,6 +973,12 @@
         snake.forEach(s => { ctx.fillRect(s.x * TILE + 1, s.y * TILE + 1, TILE - 2, TILE - 2); });
         ctx.fillStyle = '#4a6fa5';
         ctx.fillRect(food.x * TILE + 2, food.y * TILE + 2, TILE - 4, TILE - 4);
+        if (!running) {
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '14px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('press an arrow key to start', 200, 180);
+        }
       }
 
       function startGame() {
